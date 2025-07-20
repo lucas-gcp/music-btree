@@ -1,0 +1,9 @@
+.vscode/
+
+*.dll
+
+*.o
+*.exe
+program
+
+*.flac

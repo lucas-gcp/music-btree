@@ -9,8 +9,9 @@ struct {
     TagLib::String catalog;
 } typedef PieceInfo;
 
-bool operator <(PieceInfo a, PieceInfo b);
-bool operator >(PieceInfo a, PieceInfo b);
-bool operator ==(PieceInfo a, PieceInfo b);
+bool operator <(const PieceInfo &a, const PieceInfo &b);
+bool operator <=(const PieceInfo &a, const PieceInfo &b);
+bool operator >(const PieceInfo &a, const PieceInfo &b);
+bool operator ==(const PieceInfo &a, const PieceInfo &b);
 
 #endif

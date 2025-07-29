@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
 
-#include "btree_interface.h"
+#include "bptree_interface.h"
 
 using namespace std;
 
 int main() {
-    BTreeInterface interface();
+    BPTreeInterface interface = BPTreeInterface();
     
     string op;
     do {
@@ -16,7 +16,7 @@ int main() {
             string scan_path;
             cout << "Dir: " << flush;
             getline(cin, scan_path);
-
+            
             // scan(scan_path);
 
         } else if (op == "insert") {
@@ -24,7 +24,7 @@ int main() {
             cout << "Dir: " << flush;
             getline(cin, insert_path);
 
-            // insert(insert_path);
+            interface.insert(insert_path);
 
         } else if (op == "search") {
             string composer, piece_name, catalog;
@@ -50,4 +50,7 @@ int main() {
             cout << "Valid operations: scan, insert, search, exit, help" << endl;
         }
     } while (op != "exit");
+    // interface.bt.print_tree();
+
+    return 0;
 }

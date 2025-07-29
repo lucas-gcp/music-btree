@@ -11,8 +11,10 @@ using std::string;
 namespace fs = std::filesystem;
 using namespace utec::disk;
 
+#define ID_SIZE 40
+
 struct Pair {
-    char id[40];
+    char id[ID_SIZE];
     long page_id;
 
     bool operator<(const Pair &p) const {
@@ -34,10 +36,10 @@ struct Pair {
 #define PAGE_SIZE   1024
 #define BTREE_ORDER ((PAGE_SIZE - (5 * sizeof(long) + sizeof(Pair)) ) /  (sizeof(Pair) + sizeof(long)))
 
-class BTreeInterface {
+class BPTreeInterface {
     public: 
-        BTreeInterface();
-        ~BTreeInterface();
+        BPTreeInterface();
+        ~BPTreeInterface();
 
         void scan(string &scan_path);
         void insert(string &insert_path);
@@ -46,6 +48,8 @@ class BTreeInterface {
         std::shared_ptr<pagemanager> pm;
         btree<Pair, BTREE_ORDER> bt;
         pagemanager record_manager;
+
+        long curr_page_id;
 };
 
 #endif

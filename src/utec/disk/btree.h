@@ -110,7 +110,6 @@ namespace utec {
             void write_node(long page_id, node n) { pm->save(page_id, n); }
 
             void insert(const T &value) {
-                cout << "oi" << endl;
                 node root = read_node(header.root_id);
                 int state = insert(root, value);
 

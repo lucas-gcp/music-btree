@@ -37,6 +37,13 @@ int main() {
             cout << "Catalog number: " << flush;
             getline(cin, catalog);
 
+            PieceInfo to_search {composer, piece_name, catalog};
+            to_search.composer = composer;
+            to_search.name = piece_name;
+            to_search.catalog = catalog;
+
+            interface.search(to_search);
+
         } else if (op == "exit") {
             break;
         } else if (op == "help") {

@@ -7,16 +7,20 @@
 #include "utec/disk/btree.h"
 #include "utec/disk/pagemanager.h"
 
+#include "piece_info.h"
+
 using std::string;
 namespace fs = std::filesystem;
 using namespace utec::disk;
 
+#ifndef ID_SIZE
 #define ID_SIZE 40
+#endif
 
 struct Pair {
-    char id[ID_SIZE];
+    char id[ID_SIZE]; 
     long page_id;
-
+    
     bool operator<(const Pair &p) const {
         if (this->id < p.id) return true;
         else return false;
@@ -33,6 +37,8 @@ struct Pair {
     }
 };
 
+#define PAIR_SIZE (sizeof(char) * ID_SIZE + sizeof(long))
+
 #define PAGE_SIZE   1024
 #define BTREE_ORDER ((PAGE_SIZE - (5 * sizeof(long) + sizeof(Pair)) ) /  (sizeof(Pair) + sizeof(long)))
 
@@ -43,6 +49,7 @@ class BPTreeInterface {
 
         void scan(string &scan_path);
         void insert(string &insert_path);
+        void search(PieceInfo &p);
         
     private:
         std::shared_ptr<pagemanager> pm;

@@ -4,7 +4,7 @@
 #include <string>
 #include <filesystem>
 
-#include "btree.h"
+#include "btree/btree.h"
 
 #include "piece_info.h"
 

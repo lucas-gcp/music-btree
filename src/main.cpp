@@ -5,9 +5,10 @@
 
 using namespace std;
 
-int main() {
-    BPTreeInterface interface = BPTreeInterface();
-    
+int main(int argc, char **argv) {
+    bool ovewrite = true;
+    BPTreeInterface interface(ovewrite);
+
     string op;
     do {
         getline(cin, op);
@@ -57,7 +58,7 @@ int main() {
             cout << "Valid operations: scan, insert, search, exit, help" << endl;
         }
     } while (op != "exit");
-    // interface.bt.print_tree();
+    interface.print_tree();
 
     return 0;
 }

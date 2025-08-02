@@ -11,23 +11,27 @@ using namespace std;
 
 int c = 0;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     bool overwrite = true;
-    std::unique_ptr<TreeStrategy> treePtr = 
+    std::unique_ptr<TreeStrategy> treePtr =
         std::make_unique<BPTreeStrategy>();
 
-    string op; 
-    do {
+    string op;
+    do
+    {
         getline(cin, op);
-        
-        if (op == "scan") {
+
+        if (op == "scan")
+        {
             string scan_path;
             cout << "Dir: " << flush;
             getline(cin, scan_path);
-            
-            // scan(scan_path);
 
-        } else if (op == "insert") {
+            // scan(scan_path);
+        }
+        else if (op == "insert")
+        {
             string insert_path;
             cout << "Dir: " << flush;
             getline(cin, insert_path);
@@ -36,14 +40,17 @@ int main(int argc, char **argv) {
 
             read_album_tags(insert_path, to_insert);
 
-            for (const auto& data : to_insert) {
+            for (const auto &data : to_insert)
+            {
                 cout << "Piece name: " << data.piece_name << endl;
                 cout << "Composer: " << data.composer << endl;
                 cout << "Catalog number: " << data.catalog << endl;
                 treePtr->insert_tree(std::to_string(c++), data);
                 treePtr->insert_tree(std::to_string(c++), data);
             }
-        } else if (op == "search") {
+        }
+        else if (op == "search")
+        {
             string composer, piece_name, catalog;
 
             cout << "Composer: " << flush;
@@ -56,16 +63,22 @@ int main(int argc, char **argv) {
             getline(cin, catalog);
 
             cout << "Found: " << treePtr->search_tree(composer, piece_name, catalog).piece_name << endl;
-        } else if (op == "exit") {
+        }
+        else if (op == "exit")
+        {
             break;
-        } else if (op == "help") {
+        }
+        else if (op == "help")
+        {
             cout << "Commands:\n"
                  << "scan: scans (recursively) all files and subdirectories of dir.\n"
                  << "insert: insert all files of dir in the database.\n"
                  << "search: finds a piece of music using composer, piece name and catalog information.\n"
                  << "exit: stop execution.\n"
                  << "help: show information about all avaliable commands." << endl;
-        } else {
+        }
+        else
+        {
             cout << "Valid operations: scan, insert, search, exit, help" << endl;
         }
     } while (op != "exit");

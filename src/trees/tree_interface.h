@@ -11,14 +11,18 @@ struct BTreeData {
     char composer[64];
     char piece_name[64];
     char catalog[16];
+    float mean_duration;
+    int num_recordings;
 
     BTreeData() {
         std::memset(composer, 0, sizeof(composer));
         std::memset(piece_name, 0, sizeof(piece_name));
         std::memset(catalog, 0, sizeof(catalog));
+        mean_duration = 0.0f;
+        num_recordings = 0;
     }
 
-    BTreeData(const std::string& c, const std::string& p, const std::string& cat) {
+    BTreeData(const std::string& c, const std::string& p, const std::string& cat, float duration, int recordings) {
         std::strncpy(composer, c.c_str(), sizeof(composer) - 1);
         composer[sizeof(composer) - 1] = '\0';
         std::strncpy(piece_name, p.c_str(), sizeof(piece_name) - 1);
@@ -34,6 +38,9 @@ struct BTreeData {
         
         comp_result = std::strcmp(piece_name, other.piece_name);
         if (comp_result != 0) return comp_result < 0;
+
+        if (mean_duration != other.mean_duration) return mean_duration < other.mean_duration;
+        return num_recordings < other.num_recordings;
         
         return std::strcmp(catalog, other.catalog) < 0;
     }

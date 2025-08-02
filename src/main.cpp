@@ -3,7 +3,8 @@
 #include <set>
 
 #include "./trees/tree_interface.h"
-#include "./trees/bptree/bptree.h"
+// #include "./trees/bptree/bptree.h"
+#include "./trees/btree/btree.h"
 #include "./read_tags.h"
 
 using namespace std;

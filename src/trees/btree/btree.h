@@ -12,22 +12,6 @@
 
 #include "../tree_interface.h"
 
-
-class BTreeStrategy : public TreeStrategy {
-private:
-    PersistentBTree<BTreeData> btree;
-public:
-    BTreeStrategy():btree("person_btree.db") {}
-
-    void insert_tree(std::string key, BTreeData data) override {
-        this->btree.insert(key, data);
-    }
-
-    BTreeData search_tree(std::string key) override {
-        return this->btree.search(key);
-    }
-};
-
 template<typename ValueType>
 class PersistentBTree {
     // C++11/14 compatible static_assert
@@ -35,12 +19,12 @@ class PersistentBTree {
                   "ValueType must be trivially copyable for binary serialization");
     
 private:
-    static constexpr int MIN_DEGREE = 20;
+    static constexpr int MIN_DEGREE = 4092/(283*2); // 4092 bytes per node, 283 bytes per key-value pair
     static constexpr int MAX_KEYS = 2 * MIN_DEGREE - 1;
     static constexpr int MAX_CHILDREN = 2 * MIN_DEGREE;
-    static constexpr size_t NODE_SIZE = 4096;
-    static constexpr size_t METADATA_SIZE = 32;
-    
+    static constexpr size_t NODE_SIZE = 4092;
+    static constexpr size_t METADATA_SIZE = 64 + 64 + 2 + 1;
+
     struct Node {
         bool is_leaf;
         int num_keys;
@@ -549,6 +533,21 @@ private:
                 }
             }
         }
+    }
+};
+
+class BTreeStrategy : public TreeStrategy {
+private:
+    PersistentBTree<BTreeData> btree;
+public:
+    BTreeStrategy():btree("btree.db") {}
+
+    void insert_tree(std::string key, BTreeData data) override {
+        this->btree.insert(key, data);
+    }
+
+    BTreeData search_tree(std::string key) override {
+        return this->btree.search(key);
     }
 };
 

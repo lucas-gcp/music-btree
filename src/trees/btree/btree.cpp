@@ -543,7 +543,7 @@ public:
         this->btree.insert(key, data);
     }
 
-    BTreeData search_tree(std::string key) override {
-        return this->btree.search(key);
+    BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) override {
+        return btree.search(composer + catalog + piece_name);
     }
 };

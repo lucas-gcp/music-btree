@@ -1,20 +1,22 @@
-CPP = g++ -std=c++17
-INCLUDES = -I/opt/homebrew/Cellar/taglib/2.1.1/include -I/opt/homebrew/Cellar/taglib/2.1.1/include/taglib
-LIB = -L/opt/homebrew/Cellar/taglib/2.1.1/lib -ltag
+CPP = g++ -O3 -std=c++20
+INCLUDES = -I../taglib/include/ -I../taglib/include/taglib -Itrees/bptree
+LIB = -L../taglib/lib -ltag -lz
 
 all: program
 
-program: btree.o bptree.o read_tags.o main.o
-	$(CPP) $(INCLUDES) btree.o bptree.o read_tags.o main.o -o program $(LIB)
+program: btree.o bptree read_tags.o main.o
+	$(CPP) $(INCLUDES) btree.o property.o read_tags.o main.o -o program $(LIB)
 
 read_tags.o: read_tags.cpp read_tags.h
 	$(CPP) $(INCLUDES) -c read_tags.cpp
 
-btree.o: ./trees/btree/btree.cpp ./trees/btree/btree.h
-	$(CPP) $(INCLUDES) -c ./trees/btree/btree.cpp
+btree.o: trees/btree/btree.cpp trees/btree/btree.h
+	$(CPP) $(INCLUDES) -c trees/btree/btree.cpp
 
-bptree.o: ./trees/bptree/bptree.cpp ./trees/bptree/bptree.h
-	$(CPP) $(INCLUDES) -c ./trees/bptree/bptree.cpp
+bptree: trees/bptree/bplustree.hpp property.o
 
-main.o: main.cpp
+property.o: trees/bptree/property.cpp
+	$(CPP) $(INCLUDES) -c trees/bptree/property.cpp
+
+main.o: main.cpp trees/bptree/bplustree.hpp
 	$(CPP) $(INCLUDES) -c main.cpp

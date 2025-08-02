@@ -12,22 +12,6 @@
 
 #include "../tree_interface.h"
 
-
-class BTreeStrategy : public TreeStrategy {
-private:
-    PersistentBTree<BTreeData> btree;
-public:
-    BTreeStrategy():btree("person_btree.db") {}
-
-    void insert_tree(std::string key, BTreeData data) override {
-        this->btree.insert(key, data);
-    }
-
-    BTreeData search_tree(std::string key) override {
-        return this->btree.search(key);
-    }
-};
-
 template<typename ValueType>
 class PersistentBTree {
     // C++11/14 compatible static_assert
@@ -549,6 +533,21 @@ private:
                 }
             }
         }
+    }
+};
+
+class BTreeStrategy : public TreeStrategy {
+private:
+    PersistentBTree<BTreeData> btree;
+public:
+    BTreeStrategy():btree("person_btree.db") {}
+
+    void insert_tree(std::string key, BTreeData data) override {
+        btree.insert(key, data);
+    }
+
+    BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) override {
+        return btree.search(composer + catalog + piece_name);
     }
 };
 

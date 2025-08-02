@@ -2,9 +2,10 @@
 #include <string>
 #include <set>
 
-#include "./trees/tree_interface.h"
-#include "./trees/bptree/bptree.h"
-#include "./read_tags.h"
+#include "trees/tree_interface.h"
+#include "trees/btree/btree.h"
+#include "trees/bptree/bplustree.hpp"
+#include "read_tags.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ int c = 0;
 int main(int argc, char **argv) {
     bool overwrite = true;
     std::unique_ptr<TreeStrategy> treePtr = 
-        std::make_unique<BTreeStrategy>();
+        std::make_unique<BPTreeStrategy>();
 
     string op; 
     do {
@@ -40,25 +41,21 @@ int main(int argc, char **argv) {
                 cout << "Composer: " << data.composer << endl;
                 cout << "Catalog number: " << data.catalog << endl;
                 treePtr->insert_tree(std::to_string(c++), data);
+                treePtr->insert_tree(std::to_string(c++), data);
             }
         } else if (op == "search") {
-            string key;
-            getline(cin, key);
-            // string composer, piece_name, catalog;
-            // cout << "Composer: " << flush;
-            // getline(cin, composer);
+            string composer, piece_name, catalog;
 
-            // cout << "Piece name: " << flush;
-            // getline(cin, piece_name);
+            cout << "Composer: " << flush;
+            getline(cin, composer);
 
-            // cout << "Catalog number: " << flush;
-            // getline(cin, catalog);
+            cout << "Piece name: " << flush;
+            getline(cin, piece_name);
 
-            // BTreeData to_search {composer, piece_name, catalog};
+            cout << "Catalog number: " << flush;
+            getline(cin, catalog);
 
-            cout << treePtr->search_tree(key).piece_name << endl;
-
-            // treePtr->search_tree(to_search);
+            cout << "Found: " << treePtr->search_tree(composer, piece_name, catalog).piece_name << endl;
         } else if (op == "exit") {
             break;
         } else if (op == "help") {

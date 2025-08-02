@@ -1,20 +1,20 @@
 CPP = g++ -std=c++17
-include = -ID:\pkg\include -ID:\pkg\include\taglib
-lib = -LD:\pkg\lib -ltag
+INCLUDES = -I/opt/homebrew/Cellar/taglib/2.1.1/include -I/opt/homebrew/Cellar/taglib/2.1.1/include/taglib
+LIB = -L/opt/homebrew/Cellar/taglib/2.1.1/lib -ltag
 
 all: program
 
-program: piece_info.o read_tags.o bptree_interface.o main.o
-	$(CPP) $(include) piece_info.o read_tags.o bptree_interface.o main.o -o program $(lib)
-
-piece_info.o: piece_info.cpp piece_info.h
-	$(CPP) $(include) -c piece_info.cpp
+program: btree.o bptree.o read_tags.o main.o
+	$(CPP) $(INCLUDES) btree.o bptree.o read_tags.o main.o -o program $(LIB)
 
 read_tags.o: read_tags.cpp read_tags.h
-	$(CPP) $(include) -c read_tags.cpp
+	$(CPP) $(INCLUDES) -c read_tags.cpp
 
-bptree_interface.o: bptree_interface.cpp bptree_interface.h
-	$(CPP) $(include) -c bptree_interface.cpp
+btree.o: ./trees/btree/btree.cpp ./trees/btree/btree.h
+	$(CPP) $(INCLUDES) -c ./trees/btree/btree.cpp
+
+bptree.o: ./trees/bptree/bptree.cpp ./trees/bptree/bptree.h
+	$(CPP) $(INCLUDES) -c ./trees/bptree/bptree.cpp
 
 main.o: main.cpp
-	$(CPP) $(include) -c main.cpp
+	$(CPP) $(INCLUDES) -c main.cpp

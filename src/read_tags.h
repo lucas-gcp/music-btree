@@ -3,13 +3,12 @@
 
 #include <filesystem>
 #include <set>
-#include "piece_info.h"
 
 using std::set;
 namespace fs = std::filesystem;
 
-void read_tags(fs::path music_path, PieceInfo &info);
+void read_tags(fs::path music_path, BTreeData &data);
 
-void read_album_tags(fs::path album_path, set<PieceInfo> &album_pieces);
+void read_album_tags(fs::path album_path, set<BTreeData> &album_pieces);
 
 #endif

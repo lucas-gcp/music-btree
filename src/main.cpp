@@ -1,15 +1,21 @@
 #include <iostream>
 #include <string>
+#include <set>
 
-#include "bptree_interface.h"
+#include "./trees/tree_interface.h"
+#include "./trees/bptree/bptree.h"
+#include "./read_tags.h"
 
 using namespace std;
 
-int main(int argc, char **argv) {
-    bool ovewrite = true;
-    BPTreeInterface interface(ovewrite);
+int c = 0;
 
-    string op;
+int main(int argc, char **argv) {
+    bool overwrite = true;
+    std::unique_ptr<TreeStrategy> treePtr = 
+        std::make_unique<BTreeStrategy>();
+
+    string op; 
     do {
         getline(cin, op);
         
@@ -25,26 +31,34 @@ int main(int argc, char **argv) {
             cout << "Dir: " << flush;
             getline(cin, insert_path);
 
-            interface.insert(insert_path);
+            set<BTreeData> to_insert;
 
+            read_album_tags(insert_path, to_insert);
+
+            for (const auto& data : to_insert) {
+                cout << "Piece name: " << data.piece_name << endl;
+                cout << "Composer: " << data.composer << endl;
+                cout << "Catalog number: " << data.catalog << endl;
+                treePtr->insert_tree(std::to_string(c++), data);
+            }
         } else if (op == "search") {
-            string composer, piece_name, catalog;
-            cout << "Composer: " << flush;
-            getline(cin, composer);
+            string key;
+            getline(cin, key);
+            // string composer, piece_name, catalog;
+            // cout << "Composer: " << flush;
+            // getline(cin, composer);
 
-            cout << "Piece name: " << flush;
-            getline(cin, piece_name);
+            // cout << "Piece name: " << flush;
+            // getline(cin, piece_name);
 
-            cout << "Catalog number: " << flush;
-            getline(cin, catalog);
+            // cout << "Catalog number: " << flush;
+            // getline(cin, catalog);
 
-            PieceInfo to_search {composer, piece_name, catalog};
-            to_search.composer = composer;
-            to_search.name = piece_name;
-            to_search.catalog = catalog;
+            // BTreeData to_search {composer, piece_name, catalog};
 
-            interface.search(to_search);
+            cout << treePtr->search_tree(key).piece_name << endl;
 
+            // treePtr->search_tree(to_search);
         } else if (op == "exit") {
             break;
         } else if (op == "help") {
@@ -58,7 +72,6 @@ int main(int argc, char **argv) {
             cout << "Valid operations: scan, insert, search, exit, help" << endl;
         }
     } while (op != "exit");
-    interface.print_tree();
 
     return 0;
 }

@@ -20,14 +20,19 @@ class PersistentBTree
                   "ValueType must be trivially copyable for binary serialization");
 
 private:
-    static constexpr int MIN_DEGREE = 4092 / (283 * 2); // 4092 bytes per node, 283 bytes per key-value pair
-    static constexpr int MAX_KEYS = 2 * MIN_DEGREE - 1;
-    static constexpr int MAX_CHILDREN = 2 * MIN_DEGREE;
-    static constexpr size_t NODE_SIZE = 4092;
-    static constexpr size_t METADATA_SIZE = 64 + 64 + 2 + 1;
+    static constexpr size_t METADATA_SIZE = 32;
+    static constexpr size_t NODE_SIZE = 4096;
+    static constexpr size_t NODE_OVERHEAD = 2 * sizeof(bool) + sizeof(long) + sizeof(int);
 
-    struct Node
-    {
+    static constexpr size_t KEY_SIZE = (COMPOSER_SIZE + CATALOG_SIZE + sizeof(uint32_t));
+    static constexpr size_t DATA_SIZE = sizeof(BTreeData);
+    static constexpr size_t POINTER_SIZE = sizeof(long);
+
+    static constexpr int MAX_KEYS = ((NODE_SIZE - NODE_OVERHEAD) / (KEY_SIZE + DATA_SIZE + POINTER_SIZE) - POINTER_SIZE);
+    static constexpr int MIN_DEGREE = ((MAX_KEYS + 1) / 2);
+    static constexpr int MAX_CHILDREN = (MAX_KEYS + 1);
+
+    struct Node {
         bool is_leaf;
         int num_keys;
         std::vector<std::string> keys;
@@ -62,8 +67,7 @@ public:
         // Try to open existing file
         file.open(filename.c_str(), std::ios::in | std::ios::out | std::ios::binary);
 
-        if (!file.is_open() || file.peek() == std::ifstream::traits_type::eof())
-        {
+        if (!file.is_open() || file.peek() == std::ifstream::traits_type::eof()) {
             // Create new file or file is empty
             file.close();
             file.open(filename.c_str(), std::ios::out | std::ios::binary);
@@ -78,16 +82,13 @@ public:
             write_metadata();
             write_node(root.get());
         }
-        else
-        {
+        else {
             // Load existing database
             read_metadata();
-            if (root_position >= 0)
-            {
+            if (root_position >= 0) {
                 root = read_node(root_position);
             }
-            else
-            {
+            else {
                 // Corrupted metadata, create new root
                 next_free_position = METADATA_SIZE;
                 root = std::unique_ptr<Node>(new Node(true));
@@ -99,30 +100,23 @@ public:
         }
     }
 
-    ~PersistentBTree()
-    {
-        try
-        {
-            if (file.is_open())
-            {
-                if (root && root->dirty)
-                {
+    ~PersistentBTree() {
+        try {
+            if (file.is_open()) {
+                if (root && root->dirty) {
                     write_node(root.get());
                 }
                 write_metadata();
                 file.close();
             }
         }
-        catch (...)
-        {
+        catch (...) {
             // Ignore exceptions in destructor
         }
     }
 
-    bool insert(const std::string &key, const ValueType &value)
-    {
-        if (root->num_keys == MAX_KEYS)
-        {
+    bool insert(const std::string &key, const ValueType &value) {
+        if (root->num_keys == MAX_KEYS) {
             // Root is full, need to split
             std::unique_ptr<Node> new_root(new Node(false));
             new_root->file_position = allocate_node_position();
@@ -325,15 +319,13 @@ private:
         offset += sizeof(node->num_keys);
 
         // Validate num_keys
-        if (node->num_keys < 0 || node->num_keys > MAX_KEYS)
-        {
+        if (node->num_keys < 0 || node->num_keys > MAX_KEYS) {
             node->num_keys = 0;
             return node;
         }
 
         // Read keys and values
-        for (int i = 0; i < node->num_keys; ++i)
-        {
+        for (int i = 0; i < node->num_keys; ++i) {
             // Read key
             if (offset + sizeof(uint32_t) > NODE_SIZE)
                 break;
@@ -360,14 +352,12 @@ private:
         }
 
         // Read children positions
-        if (!node->is_leaf && offset + sizeof(uint32_t) < NODE_SIZE)
-        {
+        if (!node->is_leaf && offset + sizeof(uint32_t) < NODE_SIZE) {
             uint32_t children_count;
             std::memcpy(&children_count, buffer + offset, sizeof(children_count));
             offset += sizeof(children_count);
 
-            if (children_count <= MAX_CHILDREN)
-            {
+            if (children_count <= MAX_CHILDREN) {
                 for (uint32_t i = 0; i < children_count && offset + sizeof(long) <= NODE_SIZE; ++i)
                 {
                     long child_pos;
@@ -381,8 +371,7 @@ private:
         return node;
     }
 
-    void write_node(Node *node)
-    {
+    void write_node(Node *node) {
         if (!node || !node->dirty || !file.is_open())
             return;
 
@@ -397,8 +386,7 @@ private:
         node->dirty = false;
     }
 
-    std::unique_ptr<Node> read_node(long position)
-    {
+    std::unique_ptr<Node> read_node(long position) {
         if (!file.is_open() || position < METADATA_SIZE)
             return std::unique_ptr<Node>();
 
@@ -412,12 +400,10 @@ private:
         return deserialize_node(buffer, position);
     }
 
-    bool insert_non_full(Node *node, const std::string &key, const ValueType &value)
-    {
+    bool insert_non_full(Node *node, const std::string &key, const ValueType &value) {
         int i = node->num_keys - 1;
 
-        if (node->is_leaf)
-        {
+        if (node->is_leaf) {
             // Find position and check for duplicate
             while (i >= 0 && key < node->keys[i])
             {
@@ -441,8 +427,7 @@ private:
             write_node(node);
             return true;
         }
-        else
-        {
+        else {
             // Find child to insert into
             while (i >= 0 && key < node->keys[i])
             {
@@ -485,24 +470,20 @@ private:
         }
     }
 
-    void split_child(Node *parent, int index, Node *full_child)
-    {
+    void split_child(Node *parent, int index, Node *full_child) {
         std::unique_ptr<Node> new_child(new Node(full_child->is_leaf));
         new_child->file_position = allocate_node_position();
         new_child->num_keys = MIN_DEGREE - 1;
 
         // Copy second half of keys and values
-        for (int j = 0; j < MIN_DEGREE - 1; j++)
-        {
+        for (int j = 0; j < MIN_DEGREE - 1; j++) {
             new_child->keys.push_back(full_child->keys[j + MIN_DEGREE]);
             new_child->values.push_back(full_child->values[j + MIN_DEGREE]);
         }
 
         // Copy second half of children if not leaf
-        if (!full_child->is_leaf)
-        {
-            for (int j = 0; j < MIN_DEGREE; j++)
-            {
+        if (!full_child->is_leaf) {
+            for (int j = 0; j < MIN_DEGREE; j++) {
                 new_child->children.push_back(full_child->children[j + MIN_DEGREE]);
             }
             full_child->children.resize(MIN_DEGREE);
@@ -541,19 +522,16 @@ private:
             return false;
 
         int i = 0;
-        while (i < node->num_keys && key > node->keys[i])
-        {
+        while (i < node->num_keys && key > node->keys[i]) {
             i++;
         }
 
-        if (i < node->num_keys && key == node->keys[i])
-        {
+        if (i < node->num_keys && key == node->keys[i]) {
             result = node->values[i]; // Copy the value
             return true;
         }
 
-        if (node->is_leaf)
-        {
+        if (node->is_leaf) {
             return false; // Key not found
         }
 
@@ -567,60 +545,46 @@ private:
         return search_node(child.get(), key, result);
     }
 
-    void print_node(Node *node, int level)
-    {
-        if (!node)
-        {
+    void print_node(Node *node, int level) {
+        if (!node) {
             std::cout << "Level " << level << ": NULL node" << std::endl;
             return;
         }
 
         std::cout << "Level " << level << ": ";
-        for (int i = 0; i < node->num_keys; i++)
-        {
+        for (int i = 0; i < node->num_keys; i++) {
             std::cout << "[" << node->keys[i] << ":" << node->values[i] << "] ";
         }
         std::cout << std::endl;
 
-        if (!node->is_leaf)
-        {
-            for (size_t i = 0; i < node->children.size() && i <= static_cast<size_t>(node->num_keys); i++)
-            {
+        if (!node->is_leaf) {
+            for (size_t i = 0; i < node->children.size() && i <= static_cast<size_t>(node->num_keys); i++) {
                 std::unique_ptr<Node> child = read_node(node->children[i]);
-                if (child)
-                {
+                if (child) {
                     print_node(child.get(), level + 1);
                 }
-                else
-                {
+                else {
                     std::cout << "Level " << (level + 1) << ": Failed to read child" << std::endl;
                 }
             }
         }
     }
 
-    void collect_pairs(Node *node, std::vector<std::pair<std::string, ValueType>> &pairs)
-    {
+    void collect_pairs(Node *node, std::vector<std::pair<std::string, ValueType>> &pairs) {
         if (!node)
             return;
 
-        if (node->is_leaf)
-        {
-            for (int i = 0; i < node->num_keys; i++)
-            {
+        if (node->is_leaf) {
+            for (int i = 0; i < node->num_keys; i++) {
                 pairs.push_back(std::make_pair(node->keys[i], node->values[i]));
             }
         }
-        else
-        {
-            for (int i = 0; i < node->num_keys; i++)
-            {
+        else {
+            for (int i = 0; i < node->num_keys; i++) {
                 // Collect from left child
-                if (i < static_cast<int>(node->children.size()))
-                {
+                if (i < static_cast<int>(node->children.size())) {
                     std::unique_ptr<Node> child = read_node(node->children[i]);
-                    if (child)
-                    {
+                    if (child) {
                         collect_pairs(child.get(), pairs);
                     }
                 }
@@ -630,11 +594,9 @@ private:
             }
 
             // Collect from rightmost child
-            if (node->num_keys < static_cast<int>(node->children.size()))
-            {
+            if (node->num_keys < static_cast<int>(node->children.size())) {
                 std::unique_ptr<Node> child = read_node(node->children[node->num_keys]);
-                if (child)
-                {
+                if (child) {
                     collect_pairs(child.get(), pairs);
                 }
             }
@@ -642,22 +604,20 @@ private:
     }
 };
 
-class BTreeStrategy : public TreeStrategy
-{
+class BTreeStrategy : public TreeStrategy {
 private:
     PersistentBTree<BTreeData> btree;
 
 public:
     BTreeStrategy() : btree("btree.db") {}
 
-    void insert_tree(std::string key, BTreeData data) override
-    {
-        this->btree.insert(key, data);
+    void insert_tree(BTreeData data) override {
+        std::string key = std::string(data.composer) + std::string(data.catalog);
+        btree.insert(key, data);
     }
 
-    BTreeData search_tree(std::string key) override
-    {
-        return this->btree.search(key);
+    BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) override {
+        return btree.search(composer + catalog);
     }
 };
 

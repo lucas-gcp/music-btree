@@ -11,25 +11,18 @@
 #define PIECE_NAME_SIZE 64
 #define CATALOG_SIZE 8
 
-struct BTreeData
-{
+struct BTreeData {
     char composer[COMPOSER_SIZE];
     char piece_name[PIECE_NAME_SIZE];
     char catalog[CATALOG_SIZE];
 
-    BTreeData()
-    {
+    BTreeData() {
         std::memset(composer, 0, sizeof(composer));
         std::memset(piece_name, 0, sizeof(piece_name));
         std::memset(catalog, 0, sizeof(catalog));
-        mean_duration = 0.0f;
-        num_recordings = 0;
-        mean_duration = 0.0f;
-        num_recordings = 0;
     }
 
-    BTreeData(const std::string &c, const std::string &p, const std::string &cat)
-    {
+    BTreeData(const std::string &c, const std::string &p, const std::string &cat) {
         std::strncpy(composer, c.c_str(), sizeof(composer) - 1);
         composer[sizeof(composer) - 1] = '\0';
         std::strncpy(piece_name, p.c_str(), sizeof(piece_name) - 1);
@@ -39,8 +32,7 @@ struct BTreeData
     }
 
     // Comparison operator for std::set
-    bool operator<(const BTreeData &other) const
-    {
+    bool operator<(const BTreeData &other) const {
         int comp_result = std::strcmp(composer, other.composer);
         if (comp_result != 0)
             return comp_result < 0;
@@ -53,11 +45,10 @@ struct BTreeData
     }
 };
 
-class TreeStrategy
-{
+class TreeStrategy {
 public:
     virtual ~TreeStrategy() = default;
-    virtual void insert_tree(std::string key, BTreeData data) = 0;
+    virtual void insert_tree(BTreeData data) = 0;
     virtual BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) = 0;
 };
 

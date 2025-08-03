@@ -69,20 +69,16 @@ public:
 
 struct IndexData {
     char composer[COMPOSER_SIZE];
-    char piece_name[PIECE_NAME_SIZE];
     char catalog[CATALOG_SIZE];
 
     IndexData() {
         std::memset(composer, 0, sizeof(composer));
-        std::memset(piece_name, 0, sizeof(piece_name));
         std::memset(catalog, 0, sizeof(catalog));
     }
 
     IndexData(const char *c, const char *p, const char *cat) {
         std::strncpy(composer, c, sizeof(composer) - 1);
         composer[sizeof(composer) - 1] = '\0';
-        std::strncpy(piece_name, p, sizeof(piece_name) - 1);
-        piece_name[sizeof(piece_name) - 1] = '\0';
         std::strncpy(catalog, cat, sizeof(catalog) - 1);
         catalog[sizeof(catalog) - 1] = '\0';
     }
@@ -94,7 +90,7 @@ struct IndexData {
         comp_result = std::strcmp(catalog, other.catalog);
         if (comp_result != 0) return comp_result > 0;
         
-        return std::strcmp(piece_name, other.piece_name) > 0;
+        return 0;
     }
 };
 
@@ -123,7 +119,7 @@ public:
     btree(props, index_by_data)
     {}
 
-    void insert_tree(std::string key, BTreeData data) override {
+    void insert_tree(BTreeData data) override {
         btree.insert(data);
     }
 

@@ -20,15 +20,12 @@ namespace fs = std::filesystem;
 set<string> SUPPORTED_FILE_TYPES = {".mp3", ".flac", ".ogg"};
 
 void read_tags(fs::path music_path, BTreeData &data) {
-    // std::cout << "* \"" << music_path.string() << "\" *" << std::endl;
-
     TagLib::FileRef f(music_path.c_str());
 
     if(!f.isNull() && f.tag()) {
         TagLib::PropertyMap tags = f.properties();
 
         if(!tags.isEmpty()) {
-            // std::cout << "-- TAG (properties) --" << std::endl;
             for(auto j = tags.cbegin(); j != tags.cend(); ++j) {
                 for(auto k = j->second.begin(); k != j->second.end(); ++k) {
                     if (strlen(data.composer) == 0 || strlen(data.piece_name) == 0 || strlen(data.catalog) == 0) {
@@ -41,8 +38,6 @@ void read_tags(fs::path music_path, BTreeData &data) {
                     }
                 }
             }
-            if (strlen(data.piece_name) != 0)
-                std::cout << data.composer << ": " << data.piece_name << ", Op. " << data.catalog << std::endl;
         }
     }
 }

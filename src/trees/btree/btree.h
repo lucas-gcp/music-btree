@@ -19,16 +19,16 @@ class PersistentBTree
     static_assert(std::is_trivially_copyable<ValueType>::value,
                   "ValueType must be trivially copyable for binary serialization");
 
-private:
-    static constexpr size_t METADATA_SIZE = 32;
+private:    
+    static constexpr size_t METADATA_SIZE = 2*sizeof(long) + 2*sizeof(size_t);
     static constexpr size_t NODE_SIZE = 4096;
-    static constexpr size_t NODE_OVERHEAD = 2 * sizeof(bool) + sizeof(long) + sizeof(int);
+    static constexpr size_t NODE_OVERHEAD = (2 * sizeof(bool) + sizeof(long) + sizeof(int));
 
-    static constexpr size_t KEY_SIZE = (COMPOSER_SIZE + CATALOG_SIZE + sizeof(uint32_t));
+    static constexpr size_t KEY_SIZE = (COMPOSER_SIZE + CATALOG_SIZE + sizeof(std::string("")));
     static constexpr size_t DATA_SIZE = sizeof(BTreeData);
     static constexpr size_t POINTER_SIZE = sizeof(long);
 
-    static constexpr int MAX_KEYS = ((NODE_SIZE - NODE_OVERHEAD) / (KEY_SIZE + DATA_SIZE + POINTER_SIZE) - POINTER_SIZE);
+    static constexpr int MAX_KEYS = ((NODE_SIZE - NODE_OVERHEAD - POINTER_SIZE) / (KEY_SIZE + DATA_SIZE + POINTER_SIZE));
     static constexpr int MIN_DEGREE = ((MAX_KEYS + 1) / 2);
     static constexpr int MAX_CHILDREN = (MAX_KEYS + 1);
 

@@ -9,12 +9,10 @@
 
 using namespace std;
 
-int c = 0;
-
 int main(int argc, char **argv) {
     bool overwrite = true;
     std::unique_ptr<TreeStrategy> treePtr =
-        std::make_unique<BTreeStrategy>();
+        std::make_unique<BPTreeStrategy>();
 
     string op;
     do {
@@ -56,6 +54,11 @@ int main(int argc, char **argv) {
 
             cout << "Found: " << treePtr->search_tree(composer, piece_name, catalog).piece_name << endl;
         } else if (op == "exit") {
+            for (int i = 1; i <= 1500; i++) {
+                cout << "Beethoven" << i << endl;
+                treePtr->insert_tree(BTreeData {"Beethoven", std::to_string(i), std::to_string(i)});
+            }
+            cout << treePtr->search_tree("Beethoven", std::to_string(200), std::to_string(200)).piece_name << endl;
             break;
         } else if (op == "help") {
             cout << "Commands:\n"

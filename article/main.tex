@@ -82,10 +82,10 @@ estrutura de dados utilizada para a organização de um arquivo e os índices
 (também chamados chaves) de seus registros. Além disso, é uma generalização das
 árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
 nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
-\le 2t-1$, além de $n+1$ ponteiros por nó. Ainda no mesmo artigo, o custo para
+\le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
 as operações de busca, inserção e remoção crescem em proporção logarítmica com o
 aumento de registros do arquivo, o que representa um custo operacional
-relativamente baixo.
+relativamente baixo~\cite{cd:79}.
 
 Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
 Apesar disso, seguindo as regras que definem a estrutura da árvore e seu
@@ -94,7 +94,7 @@ página de registros, de modo a se atingir uma pequena quantidade de acessos ao
 disco e a otimização dos processos de manipulação de registros do arquivo.
 
 Enquanto isso, a árvore B+ é uma variação da árvore B, onde possui como
-diferencial a ausência de registros em nós que não são folhas na estrutura, ou
+diferencial a ausência de registros em nós da estrutura que não são folhas, ou
 seja, os registros estão apenas contidas nas folhas e as chaves estarão nos
 outros nós, sendo estas do mesmo tipo dos registros, mas não  armazenados na
 estrutura, tendo um papel de guia na busca efetuada na árvore \cite{kpm:10}.
@@ -102,21 +102,22 @@ estrutura, tendo um papel de guia na busca efetuada na árvore \cite{kpm:10}.
 \section{Problema de Pesquisa}
 
 Levando em consideração o contexto de músicas clássicas, uma composição, feita
-por um único compositor, pode haver diferentes interpretações por diferentes
-músicos, onde ela ganha uma gravação única. Com isso, uma necessidade relevante
-para os ouvintes desse estilo de  música é a busca dessas diferentes
-interpretações de uma composição de forma eficiente, ou seja rápida e não
-exaustiva para o ouvinte, ocasionando na elevação da experiência do usuário.
+por um único compositor, possui diversas interpretações por diferentes músicos.
+Com isso, uma necessidade relevante para os ouvintes desse estilo de música é a
+busca dessas diferentes interpretações de uma composição de forma prática e
+amigável, elevando a experiência do usuário.
 
 Mesmo com isso em mente, poucas plataformas de \emph{streaming} de música levam
 isso em consideração, pois se trata de um nicho dentro da imensa diversidade de
-usuários, estilos e gêneros musicais. Como exemplo, o comportamento do Spotify,
-uma das principais plataformas \emph{streaming} de música mais utilizada, é
-desagradável, pois ao realizar uma pesquisa com o nome da composição desejada,
-ao invés de ser exibido resultados relevantes como descrito anteriormente, são
-exibidos resultados baseados em artefatos irrelevantes, como o “álbums” do
-compositor, ignorando outros resultados de interpretações da composição,
-exemplificado na Figura~\ref{fig:spotify}.
+usuários, estilos e gêneros musicais.
+Como exemplo, o comportamento do Spotify, uma das principais plataformas de
+\emph{streaming} de música, não é adequado, pois, ao realizar uma pesquisa com o
+nome da composição desejada, são exibidos resultados irrelevantes, como outras
+músicas com nomes parecidos (tanto do mesmo compositor, como de outros), 
+dificultando a busca por gravações da peça desejada.
+A Figura~\ref{fig:spotify}, na qual foi feita a pesquisa ``Bach Trio Sonata no. 3'',
+é um exemplo disso, pois nenhum dos resultados principais condiz com a música
+pesquisada.
 
 \begin{figure}[ht]
 \centering
@@ -161,12 +162,12 @@ As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consult
 grande suficiente para não caber por completo na memória principal e precisa ser
 acessado da memória secundária. Elas agem de maneira a buscar o menor número de
 acessos ao disco para acessar efetivamente o registro requisitado. A altura
-dessa estrutura de árvores está no intervalo de $[log_{2t-1}\ n+1,\ log_t\
+dessa estrutura de árvores está no intervalo de $[\log_{2t-1} (n+1),\ \log_t
 \frac{n + 1}{2}]$, onde $t$ é a ordem da árvore que indica a quantidade mínima
 de registros armazenados em um nó e $n$ a quantidade de elementos
 \cite{clrs:22}. Com isso, a quantidade de acessos a páginas do disco é de
-complexidade $O(log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer os
-registros dentro de cada nó, compondo no final a complexidade de $O(t\ log_t n)$
+complexidade $O(\log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer os
+registros dentro de cada nó, compondo no final a complexidade de $O(t \log_t n)$
 para buscas~\cite{clrs:22,kpm:10}. Por isso, são parte integrante da estrutura
 central do projeto, pois permitem a indexação eficiente de cada composição a
 partir de uma chave de identificação única, representado na
@@ -179,13 +180,15 @@ Tabela~\ref{tab:complexidades}.
 \begin{tabular}{|c|c|c|}
 \hline
   Estrutura & Operação & Complexidade \\ \hline
-  \multirow{4}{*}{Árvore B} & Espaço & $O(n)$ \\ \cline{2-3} & Busca & $O(t\
-  log_t\ n)$ \\ \cline{2-3} & Inserção & $O(t\ log_t\ n)$\\ \cline{2-3} &
-  Remoção & $O(t\ log_t\ n)$ \\
+  \multirow{4}{*}{Árvore B} & Espaço   & $O(n)$ \\
+  \cline{2-3} & Busca    & $O(t \log_t n)$ \\
+  \cline{2-3} & Inserção & $O(t \log_t n)$ \\
+  \cline{2-3} & Remoção  & $O(t \log_t n)$ \\
   \hline
-  \multirow{4}{*}{Árvore B\nolinebreak+} & Espaço & $O(n)$ \\ \cline{2-3} &
-  Busca & $O(t\ log_t\ n)$ \\ \cline{2-3} & Inserção & $O(t\ log_t\ n)$\\
-  \cline{2-3} & Remoção & $O(t\ log_t\ n)$\\
+  \multirow{4}{*}{Árvore B\nolinebreak+} & Espaço & $O(n)$ \\
+  \cline{2-3} & Busca & $O(t \log_t n)$ \\
+  \cline{2-3} & Inserção & $O(t \log_t n)$\\
+  \cline{2-3} & Remoção & $O(t \log_t n)$\\
   \hline
 \end{tabular}
 \end{table}
@@ -202,7 +205,8 @@ guarda as seguintes informações:
 \end{itemize}
 
 Os metadados da música, além de usados no registro, também compõem a chave de
-busca.Dessa forma os nós da árvore terão seu indexamento atrelado ao processo de
+busca.
+Dessa forma os nós da árvore terão seu indexamento atrelado ao processo de
 comparações de strings por ordem lexicográfica para realizar suas operações de
 reorganização e busca.
 
@@ -210,7 +214,7 @@ Com a problemática em mente, foi decidido o uso da linguagem C++ para a
 implementação, pois é uma linguagem de alta performance bem estabelecida. Logo,
 por haver um extenso catálogo de bibliotecas, a implementação se torna mais
 fácil, pois já existem algumas implementações de árvores B e B\nolinebreak+,
-além da biblioteca TagLib\footnote{https://taglib.org/} para leitura de
+além da biblioteca TagLib\footnote{\url{https://taglib.org/}} para leitura de
 metadados de arquivos de música.
 
 \section{Resultados}\label{sec:figs}
@@ -261,6 +265,6 @@ images with excessive resolution, as they may take hours to print, without any
 visible difference in the result. 
 
 \bibliographystyle{sbc}
-\bibliography{sbc-template}
+\bibliography{bibliography}
 
 \end{document}

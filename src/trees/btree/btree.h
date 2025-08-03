@@ -135,61 +135,46 @@ public:
     }
 
     // Changed to return by value with a success indicator
-    bool search(const std::string &key, ValueType &result)
-    {
+    bool search(const std::string &key, ValueType &result) {
         if (!root)
             return false;
         return search_node(root.get(), key, result);
     }
 
     // Convenience function that returns a copy
-    ValueType search(const std::string &key)
-    {
+    ValueType search(const std::string &key) {
         ValueType result;
-        if (search(key, result))
-        {
+        if (search(key, result)) {
             return result;
         }
         return ValueType(); // Return default-constructed value if not found
     }
 
-    void print_tree()
-    {
-        if (root)
-        {
+    void print_tree() {
+        if (root) {
             print_node(root.get(), 0);
         }
-        else
-        {
+        else {
             std::cout << "Tree is empty" << std::endl;
         }
     }
 
     // Iterator-style function to get all key-value pairs
-    void get_all_pairs(std::vector<std::pair<std::string, ValueType>> &pairs)
-    {
+    void get_all_pairs(std::vector<std::pair<std::string, ValueType>> &pairs) {
         pairs.clear();
-        if (root)
-        {
+        if (root) {
             collect_pairs(root.get(), pairs);
         }
     }
 
 private:
-    long allocate_node_position()
-    {
+    long allocate_node_position() {
         long pos = next_free_position;
         next_free_position += NODE_SIZE;
         return pos;
     }
 
-    void deallocate_node_position(long position)
-    {
-        // Simple implementation - just mark as unused
-    }
-
-    void write_metadata()
-    {
+    void write_metadata() {
         if (!file.is_open())
             return;
 
@@ -208,55 +193,46 @@ private:
         file.flush();
     }
 
-    void read_metadata()
-    {
+    void read_metadata() {
         if (!file.is_open())
             return;
 
         file.seekg(0);
-        if (!file.read(reinterpret_cast<char *>(&root_position), sizeof(root_position)))
-        {
+        if (!file.read(reinterpret_cast<char *>(&root_position), sizeof(root_position))) {
             root_position = -1;
             next_free_position = METADATA_SIZE;
             return;
         }
 
-        if (!file.read(reinterpret_cast<char *>(&next_free_position), sizeof(next_free_position)))
-        {
+        if (!file.read(reinterpret_cast<char *>(&next_free_position), sizeof(next_free_position))) {
             next_free_position = METADATA_SIZE;
         }
 
         // Read and validate type information
         size_t stored_value_type_size;
-        if (file.read(reinterpret_cast<char *>(&stored_value_type_size), sizeof(stored_value_type_size)))
-        {
-            if (stored_value_type_size != sizeof(ValueType))
-            {
+        if (file.read(reinterpret_cast<char *>(&stored_value_type_size), sizeof(stored_value_type_size))) {
+            if (stored_value_type_size != sizeof(ValueType)) {
                 std::cerr << "Warning: Value type size mismatch. Expected "
                           << sizeof(ValueType) << ", got " << stored_value_type_size << std::endl;
             }
 
             size_t stored_type_hash;
-            if (file.read(reinterpret_cast<char *>(&stored_type_hash), sizeof(stored_type_hash)))
-            {
+            if (file.read(reinterpret_cast<char *>(&stored_type_hash), sizeof(stored_type_hash))) {
                 size_t current_type_hash = typeid(ValueType).hash_code();
-                if (stored_type_hash != current_type_hash)
-                {
+                if (stored_type_hash != current_type_hash) {
                     std::cerr << "Warning: Value type hash mismatch. Data may be incompatible." << std::endl;
                 }
             }
         }
 
         // Validate metadata
-        if (root_position < METADATA_SIZE && root_position != -1)
-        {
+        if (root_position < METADATA_SIZE && root_position != -1) {
             root_position = -1;
             next_free_position = METADATA_SIZE;
         }
     }
 
-    void serialize_node(const Node *node, char *buffer)
-    {
+    void serialize_node(const Node *node, char *buffer) {
         size_t offset = 0;
 
         // Write basic node info
@@ -267,8 +243,7 @@ private:
         offset += sizeof(node->num_keys);
 
         // Write keys and values
-        for (int i = 0; i < node->num_keys && i < MAX_KEYS; ++i)
-        {
+        for (int i = 0; i < node->num_keys && i < MAX_KEYS; ++i) {
             // Write key
             uint32_t key_len = static_cast<uint32_t>(
                 std::min(node->keys[i].length(), size_t(255)));
@@ -288,8 +263,7 @@ private:
         }
 
         // Write children positions
-        if (!node->is_leaf && offset + sizeof(uint32_t) + sizeof(long) * node->children.size() < NODE_SIZE)
-        {
+        if (!node->is_leaf && offset + sizeof(uint32_t) + sizeof(long) * node->children.size() < NODE_SIZE) {
             uint32_t children_count = static_cast<uint32_t>(node->children.size());
             std::memcpy(buffer + offset, &children_count, sizeof(children_count));
             offset += sizeof(children_count);
@@ -302,8 +276,7 @@ private:
         }
     }
 
-    std::unique_ptr<Node> deserialize_node(const char *buffer, long position)
-    {
+    std::unique_ptr<Node> deserialize_node(const char *buffer, long position) {
         std::unique_ptr<Node> node(new Node());
         node->file_position = position;
         node->dirty = false;
@@ -614,7 +587,7 @@ private:
 public:
     BTreeStrategy(fs::path db_path) : TreeStrategy(db_path), btree("btree.db") { }
 
-    void insert_tree(BTreeData data, std::string insert_path) {
+    void insert(BTreeData data, fs::path insert_path) {
         std::string key = std::string(data.composer) + std::string(data.catalog);
         btree.insert(key, data);
         TreeStrategy::insert_recording(data, insert_path);

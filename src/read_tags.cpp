@@ -9,7 +9,7 @@
 #include "tvariant.h"
 #include "fileref.h"
 #include "tag.h"
-#include "./trees/tree_interface.h"
+#include "trees/tree_interface.h"
 
 #include "read_tags.h"
 

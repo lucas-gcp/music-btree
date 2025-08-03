@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <set>
+#include "trees/tree_interface.h"
 
 using std::set;
 namespace fs = std::filesystem;

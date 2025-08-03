@@ -122,7 +122,7 @@ public:
     btree(props, index_by_data)
     {}
 
-    void insert_tree(BTreeData data, std::string insert_path) {
+    void insert(BTreeData data, fs::path insert_path) {
         btree.insert(data);
         TreeStrategy::insert_recording(data, insert_path);
     }

@@ -4,11 +4,14 @@ LIB = -L../taglib/lib -ltag -lz
 
 all: program
 
-program: bptree read_tags.o main.o
-	$(CPP) $(INCLUDES) property.o read_tags.o main.o -o program $(LIB)
+program: bptree read_tags.o tree_interface.o main.o
+	$(CPP) $(INCLUDES) read_tags.o property.o tree_interface.o main.o -o program $(LIB)
 
 read_tags.o: read_tags.cpp read_tags.h
 	$(CPP) $(INCLUDES) -c read_tags.cpp
+
+tree_interface.o: trees/tree_interface.cpp trees/tree_interface.h
+	$(CPP) $(INCLUDES) -c trees/tree_interface.cpp
 
 bptree: trees/bptree/bplustree.hpp property.o
 

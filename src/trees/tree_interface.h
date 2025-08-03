@@ -6,7 +6,6 @@
 #include <string>
 #include <cstring>
 #include <filesystem>
-#include <fstream>
 
 using namespace std;
 namespace fs = filesystem;
@@ -58,29 +57,15 @@ public:
 
     virtual ~TreeStrategy() = default;
 
-    virtual void insert_tree(BTreeData data, string insert_path) = 0;
+    virtual void insert(BTreeData data, fs::path insert_path) = 0;
 
     virtual BTreeData search_tree(string composer, string piece_name, string catalog) = 0;
 
-    void insert_recording(BTreeData data, string insert_path) {
-        if (!fs::exists(db_path / data.composer))
-            fs::create_directory(db_path / data.composer);
-        
-        fs::path piece_file_path = db_path / data.composer / (data.catalog + string(" ") + data.piece_name);
-        ofstream piece_file(piece_file_path, ofstream::app);
-        piece_file << fs::absolute(fs::path(insert_path)) << endl;
-        piece_file.close();
-    }
+    void insert_dir(fs::path insert_path);
 
-    void get_recordings(BTreeData data) {
-        fs::path piece_file_path = db_path / data.composer / (data.catalog + string(" ") + data.piece_name);
-        ifstream piece_file(piece_file_path, ofstream::app);
-        
-        if (piece_file.is_open())
-            cout << piece_file.rdbuf();
+    void insert_recording(BTreeData data, fs::path insert_path);
 
-        piece_file.close();
-    }
+    void get_recordings(BTreeData data);
 
 private:
     fs::path db_path;

@@ -7,7 +7,6 @@
 #include "trees/tree_interface.h"
 #include "trees/btree/btree.h"
 #include "trees/bptree/bplustree.hpp"
-#include "read_tags.h"
 
 using namespace std;
 namespace fs = filesystem;
@@ -29,25 +28,19 @@ int main(int argc, char **argv) {
             cout << "Dir: " << flush;
             getline(cin, scan_path);
 
-            // scan(scan_path);
-        }
-        else if (op == "insert") {
+            treePtr->insert_dir(scan_path);
+
+            for (auto const &dir_entry : fs::recursive_directory_iterator{scan_path}) {
+                if (dir_entry.is_directory()) {
+                    treePtr->insert_dir(dir_entry.path());
+                }
+            }
+        } else if (op == "insert") {
             string insert_path;
             cout << "Dir: " << flush;
             getline(cin, insert_path);
 
-            set<BTreeData> to_insert;
-
-            read_album_tags(insert_path, to_insert);
-
-            for (const auto &data : to_insert) {
-                treePtr->insert_tree(data, insert_path);
-
-                cout << "Piece name: " << data.piece_name << "\n"
-                     << "Composer: " << data.composer << "\n"
-                     << "Catalog number: " << data.catalog << "\n";
-            }
-            cout << flush;
+            treePtr->insert_dir(insert_path);
         } else if (op == "search") {
             string composer, piece_name, catalog;
 

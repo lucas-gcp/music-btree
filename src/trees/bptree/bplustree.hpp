@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <filesystem>
 #include <functional>
 #include <queue>
 #include <string>
@@ -18,6 +19,7 @@
 
 #include "../tree_interface.h"
 
+namespace fs = std::filesystem;
 
 template <
     typename FieldType,
@@ -107,8 +109,9 @@ private:
     BPlusTree<IndexData, BTreeData> btree;
 public:
     
-    BPTreeStrategy()
-        : props(
+    BPTreeStrategy(fs::path db_path)
+    : TreeStrategy(db_path),
+    props(
         "./index/bptree/",
         "metadata_index_by_id_1",
         "index_by_id_1",
@@ -119,8 +122,9 @@ public:
     btree(props, index_by_data)
     {}
 
-    void insert_tree(BTreeData data) override {
+    void insert_tree(BTreeData data, std::string insert_path) {
         btree.insert(data);
+        TreeStrategy::insert_recording(data, insert_path);
     }
 
 

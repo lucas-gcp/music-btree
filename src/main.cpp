@@ -1,4 +1,6 @@
+#include <filesystem>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <set>
 
@@ -8,11 +10,15 @@
 #include "read_tags.h"
 
 using namespace std;
+namespace fs = filesystem;
 
 int main(int argc, char **argv) {
-    bool overwrite = true;
-    std::unique_ptr<TreeStrategy> treePtr =
-        std::make_unique<BPTreeStrategy>();
+    fs::path db_path("music_db");
+    if (!fs::exists(db_path))
+        fs::create_directory(db_path);
+
+    unique_ptr<TreeStrategy> treePtr =
+        make_unique<BTreeStrategy>(db_path);
 
     string op;
     do {
@@ -35,11 +41,13 @@ int main(int argc, char **argv) {
             read_album_tags(insert_path, to_insert);
 
             for (const auto &data : to_insert) {
-                cout << "Piece name: " << data.piece_name << endl;
-                cout << "Composer: " << data.composer << endl;
-                cout << "Catalog number: " << data.catalog << endl;
-                treePtr->insert_tree(data);
+                treePtr->insert_tree(data, insert_path);
+
+                cout << "Piece name: " << data.piece_name << "\n"
+                     << "Composer: " << data.composer << "\n"
+                     << "Catalog number: " << data.catalog << "\n";
             }
+            cout << flush;
         } else if (op == "search") {
             string composer, piece_name, catalog;
 
@@ -52,13 +60,16 @@ int main(int argc, char **argv) {
             cout << "Catalog number: " << flush;
             getline(cin, catalog);
 
-            cout << "Found: " << treePtr->search_tree(composer, piece_name, catalog).piece_name << endl;
-        } else if (op == "exit") {
-            for (int i = 1; i <= 1500; i++) {
-                cout << "Beethoven" << i << endl;
-                treePtr->insert_tree(BTreeData {"Beethoven", std::to_string(i), std::to_string(i)});
+            BTreeData found = treePtr->search_tree(composer, piece_name, catalog);
+            
+            if (strcmp(found.catalog, "0") != 0) {
+                cout << "Found: " << found.piece_name << endl;
+                cout << "Recordings: " << endl;
+                treePtr->get_recordings(found);
+            } else {
+                cout << "Piece not on database" << endl;
             }
-            cout << treePtr->search_tree("Beethoven", std::to_string(200), std::to_string(200)).piece_name << endl;
+        } else if (op == "exit") {
             break;
         } else if (op == "help") {
             cout << "Commands:\n"

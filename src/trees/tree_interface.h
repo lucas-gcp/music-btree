@@ -5,6 +5,11 @@
 
 #include <string>
 #include <cstring>
+#include <filesystem>
+#include <fstream>
+
+using namespace std;
+namespace fs = filesystem;
 
 // Struct that we'll store in the B-tree
 #define COMPOSER_SIZE 64
@@ -17,39 +22,68 @@ struct BTreeData {
     char catalog[CATALOG_SIZE];
 
     BTreeData() {
-        std::memset(composer, 0, sizeof(composer));
-        std::memset(piece_name, 0, sizeof(piece_name));
-        std::memset(catalog, 0, sizeof(catalog));
+        memset(composer, 0, sizeof(composer));
+        memset(piece_name, 0, sizeof(piece_name));
+        memset(catalog, 0, sizeof(catalog));
     }
 
-    BTreeData(const std::string &c, const std::string &p, const std::string &cat) {
-        std::strncpy(composer, c.c_str(), sizeof(composer) - 1);
+    BTreeData(const string &c, const string &p, const string &cat) {
+        strncpy(composer, c.c_str(), sizeof(composer) - 1);
         composer[sizeof(composer) - 1] = '\0';
-        std::strncpy(piece_name, p.c_str(), sizeof(piece_name) - 1);
+        strncpy(piece_name, p.c_str(), sizeof(piece_name) - 1);
         piece_name[sizeof(piece_name) - 1] = '\0';
-        std::strncpy(catalog, cat.c_str(), sizeof(catalog) - 1);
+        strncpy(catalog, cat.c_str(), sizeof(catalog) - 1);
         catalog[sizeof(catalog) - 1] = '\0';
     }
 
-    // Comparison operator for std::set
+    // Comparison operator for set
     bool operator<(const BTreeData &other) const {
-        int comp_result = std::strcmp(composer, other.composer);
+        int comp_result = strcmp(composer, other.composer);
         if (comp_result != 0)
             return comp_result < 0;
 
-        comp_result = std::strcmp(piece_name, other.piece_name);
+        comp_result = strcmp(piece_name, other.piece_name);
         if (comp_result != 0)
             return comp_result < 0;
 
-        return std::strcmp(catalog, other.catalog) < 0;
+        return strcmp(catalog, other.catalog) < 0;
     }
 };
 
 class TreeStrategy {
 public:
+    TreeStrategy(fs::path db_path) {
+        this->db_path = db_path;
+    }
+
     virtual ~TreeStrategy() = default;
-    virtual void insert_tree(BTreeData data) = 0;
-    virtual BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) = 0;
+
+    virtual void insert_tree(BTreeData data, string insert_path) = 0;
+
+    virtual BTreeData search_tree(string composer, string piece_name, string catalog) = 0;
+
+    void insert_recording(BTreeData data, string insert_path) {
+        if (!fs::exists(db_path / data.composer))
+            fs::create_directory(db_path / data.composer);
+        
+        fs::path piece_file_path = db_path / data.composer / (data.catalog + string(" ") + data.piece_name);
+        ofstream piece_file(piece_file_path, ofstream::app);
+        piece_file << fs::absolute(fs::path(insert_path)) << endl;
+        piece_file.close();
+    }
+
+    void get_recordings(BTreeData data) {
+        fs::path piece_file_path = db_path / data.composer / (data.catalog + string(" ") + data.piece_name);
+        ifstream piece_file(piece_file_path, ofstream::app);
+        
+        if (piece_file.is_open())
+            cout << piece_file.rdbuf();
+
+        piece_file.close();
+    }
+
+private:
+    fs::path db_path;
 };
 
 #endif // TREE_INTERFACE_H

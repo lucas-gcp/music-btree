@@ -2,6 +2,7 @@
 #define BTREE_H
 
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -11,6 +12,8 @@
 #include <type_traits>
 
 #include "../tree_interface.h"
+
+namespace fs = std::filesystem;
 
 template <typename ValueType>
 class PersistentBTree
@@ -609,11 +612,12 @@ private:
     PersistentBTree<BTreeData> btree;
 
 public:
-    BTreeStrategy() : btree("btree.db") {}
+    BTreeStrategy(fs::path db_path) : TreeStrategy(db_path), btree("btree.db") { }
 
-    void insert_tree(BTreeData data) override {
+    void insert_tree(BTreeData data, std::string insert_path) {
         std::string key = std::string(data.composer) + std::string(data.catalog);
         btree.insert(key, data);
+        TreeStrategy::insert_recording(data, insert_path);
     }
 
     BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) override {

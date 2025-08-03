@@ -6,22 +6,21 @@
 \usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}  
 
-     
+\usepackage{multirow}
+\usepackage{amsfonts}
+
 \sloppy
 
-\title{Árvores B e B+ em Busca de Gravações de Música Clássica\\}
+\title{Árvores B e B\nolinebreak+ em Busca de Gravações de Música Clássica\\}
 
 \author{Caio Stoduto\inst{1}, Lucas Guido\inst{1}, Nicolas Greco\inst{1},\\
 Paulo Bezerra\inst{1}, Stephania Ferreira\inst{1}, Tales Bartolome\inst{1}}
 
-
-\address{CMCC -- Universidade Federal do ABC
-  (UFABC)\\
+\address{CMCC -- Universidade Federal do ABC (UFABC)\\
   Santo André -- SP -- Brazil
   \email{\{caio.stoduto,lucas.guido\}@aluno.ufabc.edu.br} \vspace{-1em}
   \email{\{nicolas.greco,paulo.bezerra\}@aluno.ufabc.edu.br} \vspace{-1em}
-  \email{\{stephania.ferreira,m.bartolome\}@aluno.ufabc.edu.br}
-}
+  \email{\{stephania.ferreira,m.bartolome\}@aluno.ufabc.edu.br} }
 
 \begin{document} 
 
@@ -30,107 +29,226 @@ Paulo Bezerra\inst{1}, Stephania Ferreira\inst{1}, Tales Bartolome\inst{1}}
 \begin{abstract}
   This meta-paper describes the style to be used in articles and short papers
   for SBC conferences. For papers in English, you should add just an abstract
-  while for the papers in Portuguese, we also ask for an abstract in
-  Portuguese (``resumo''). In both cases, abstracts should not have more than
-  10 lines and must be in the first page of the paper.
+  while for the papers in Portuguese, we also ask for an abstract in Portuguese
+  (``resumo''). In both cases, abstracts should not have more than 10 lines and
+  must be in the first page of the paper.
 \end{abstract}
      
 \begin{resumo} 
   Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
-  resumos de artigos para publicação nos anais das conferências organizadas
-  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
+  resumos de artigos para publicação nos anais das conferências organizadas pela
+  SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
   escritos em português. Artigos em inglês deverão apresentar apenas abstract.
   Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
-  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
-  página do artigo.
+  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira página
+  do artigo.
 \end{resumo}
 
 
 \section{Introdução} 
 
-All full papers and posters (short papers) submitted to some SBC conference,
-including any supporting documents, should be written in English or in
-Portuguese. The format paper should be A4 with single column, 3.5 cm for upper
-margin, 2.5 cm for bottom margin and 3.0 cm for lateral margins, without
-headers or footers. The main font must be Times, 12 point nominal size, with 6
-points of space before each paragraph. Page numbers must be suppressed.
 
-Full papers must respect the page limits defined by the conference.
-Conferences that publish just abstracts ask for \textbf{one}-page texts.
 
 \section{Revisão Bibliográfica} \label{sec:revisao}
 
-The first page must display the paper title, the name and address of the
-authors, the abstract in English and ``resumo'' in Portuguese (``resumos'' are
-required only for papers written in Portuguese). The title must be centered
-over the whole page, in 16 point boldface font and with 12 points of space
-before itself. Author names must be centered in 12 point font, bold, all of
-them disposed in the same line, separated by commas and with 12 points of
-space after the title. Addresses must be centered in 12 point font, also with
-12 points of space after the authors' names. E-mail addresses should be
-written using font Courier New, 10 point nominal size, with 6 points of space
-before and 6 points of space after.
+Durante o processo de manutenção de uma base de dados, um dos maiores custos
+operacionais é o de acesso à memória secundária. O acesso à memória secundária
+toma um tempo de ordens de magnitude maior do que o tempo que o processador leva
+em instruções simples como de comparação de valores. No entanto, qualquer
+aplicação relevante trabalhará com uma quantidade de dados muito maior do que a
+capacidade da memória principal financeiramente viável, o que torna o acesso ao
+disco uma operação fundamental para o processamento de qualquer base de dados e,
+ao pensarmos na otimização de tal processamento, a diminuição da quantidade
+destes acessos ao disco pode se tornar o principal fator para o ganho de
+performance operacional.
 
-The abstract and ``resumo'' (if is the case) must be in 12 point Times font,
-indented 0.8cm on both sides. The word \textbf{Abstract} and \textbf{Resumo},
-should be written in boldface and must precede the text.
+É possível a utilização de duas estratégias para que se tenha a diminuição de
+acessos ao disco: considerar um subconjunto de dados cada vez menor a cada
+comparação e trazer para a memória principal a maior quantidade possível de
+valores a cada acesso à memória secundária. Para trabalhar com subconjuntos cada
+vez menores de dados, é necessária a utilização de índices, de modo que cada
+registro possa ser acessado por meio de um índice único, armazenado em uma
+estrutura sequencial e ordenada, que permitirá o acesso aleatório aos registros.
+Pela comparação entre um determinado índice e o índice do elemento procurado,
+pode-se fazer uma busca em um subconjunto cada vez menor, delimitado por um
+intervalo de índices de amplitude menor àquelas referentes aos subconjuntos
+considerados em comparações anteriores. Já para trazer da memória secundária a
+maior quantidade possível de valores a cada acesso ao disco, será necessária uma
+estrutura de dados específica que tenha isso como objetivo, como a árvore B e
+suas variantes.
+
+Como apontado por Comer em seu artigo de 1979 \cite{cd:79}, a árvore B é uma
+estrutura de dados utilizada para a organização de um arquivo e os índices
+(também chamados chaves) de seus registros. Além disso, é uma generalização das
+árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
+nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
+\le 2t-1$, além de $n+1$ ponteiros por nó. Ainda no mesmo artigo, o custo para
+as operações de busca, inserção e remoção crescem em proporção logarítmica com o
+aumento de registros do arquivo, o que representa um custo operacional
+relativamente baixo.
+
+Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
+Apesar disso, seguindo as regras que definem a estrutura da árvore e seu
+balanceamento, em cada acesso é recuperado da memória não um registro, mas uma
+página de registros, de modo a se atingir uma pequena quantidade de acessos ao
+disco e a otimização dos processos de manipulação de registros do arquivo.
+
+Enquanto isso, a árvore B+ é uma variação da árvore B, onde possui como
+diferencial a ausência de registros em nós que não são folhas na estrutura, ou
+seja, os registros estão apenas contidas nas folhas e as chaves estarão nos
+outros nós, sendo estas do mesmo tipo dos registros, mas não  armazenados na
+estrutura, tendo um papel de guia na busca efetuada na árvore \cite{kpm:10}.
 
 \section{Problema de Pesquisa}
 
-In some conferences, the papers are published on CD-ROM while only the
-abstract is published in the printed Proceedings. In this case, authors are
-invited to prepare two final versions of the paper. One, complete, to be
-published on the CD and the other, containing only the first page, with
-abstract and ``resumo'' (for papers in Portuguese).
+Levando em consideração o contexto de músicas clássicas, uma composição, feita
+por um único compositor, pode haver diferentes interpretações por diferentes
+músicos, onde ela ganha uma gravação única. Com isso, uma necessidade relevante
+para os ouvintes desse estilo de  música é a busca dessas diferentes
+interpretações de uma composição de forma eficiente, ou seja rápida e não
+exaustiva para o ouvinte, ocasionando na elevação da experiência do usuário.
+
+Mesmo com isso em mente, poucas plataformas de \emph{streaming} de música levam
+isso em consideração, pois se trata de um nicho dentro da imensa diversidade de
+usuários, estilos e gêneros musicais. Como exemplo, o comportamento do Spotify,
+uma das principais plataformas \emph{streaming} de música mais utilizada, é
+desagradável, pois ao realizar uma pesquisa com o nome da composição desejada,
+ao invés de ser exibido resultados relevantes como descrito anteriormente, são
+exibidos resultados baseados em artefatos irrelevantes, como o “álbums” do
+compositor, ignorando outros resultados de interpretações da composição,
+exemplificado na Figura~\ref{fig:spotify}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{figuras/Spotify.png}
+\caption{Resultado de busca na plataforma Spotify}
+\label{fig:spotify}
+\end{figure}
+
+Em contrapartida, existem plataformas de \emph{streaming} especializadas em
+música clássica, como a plataforma IDAGIO e Presto Music, que adaptam seu
+algoritmo de pesquisa especificamente para este nicho. Apesar disso, por se
+tratar de um nicho limitado, há a grande iminência de um monopólio, por
+existirem um número baixo de plataformas com funcionalidades voltadas para
+ouvintes de música clássica. O principal exemplo desse movimento foi a aquisição
+da antiga Primephonic pela Apple, criando a Apple Music Classical. Com isso,
+abre-se o debate de se uma empresa privada com alcance de usuários diversificado
+manteria a qualidade do serviço tendo em mente ser uma empresa privada que visa
+primariamente o lucro, onde uma possível queda de ouvintes poderia tender a
+abolição dessas funcionalidades e do desenvolvimento desse setor.
+
+Por fim, este artigo cria uma implementação na seção seguinte de uma aplicação
+computacional que visa democratizar o acesso de um algoritmo decente de busca
+para música clássica, respeitando a necessidade explicitada anteriormente, por
+meio de uma prova de conceito. Isso implica a liberdade de qualquer usuário
+poder usar a solução de código livre disponibilizada podendo adaptar às próprias
+necessidades, como o uso em plataformas de \emph{streaming} ou em arquivos
+locais. Além disso, abre a possibilidade de empresas já estabelecidas no mercado
+de criarem soluções embasadas para uma disponibilidade de funcionalidades mais
+ampla dentre plataformas, desincentivando o monopólio da área.
 
 \section{Implementação}
 
-Section titles must be in boldface, 13pt, flush left. There should be an extra
-12 pt of space before each title. Section numbering is optional. The first
-paragraph of each section should not be indented, while the first lines of
-subsequent paragraphs should be indented by 1.27 cm.
+A implementação baseia-se na ideia de uma árvore de busca para o indexamento de
+músicas clássicas, permitindo a obtenção de todas as gravações pelo termo de
+busca, ou seja, o nome da composição. Para o desenvolvimento do sistema, foram
+utilizadas duas alternativas de estruturas de dados semelhantes, as árvores B e
+B\nolinebreak+ persistentes, permitindo que crie-se uma comparação direta entre
+a eficiência em termos de complexidade de tempo, espaço e facilidade de
+implementação.
 
-\subsection{Subsections}
+As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta é
+grande suficiente para não caber por completo na memória principal e precisa ser
+acessado da memória secundária. Elas agem de maneira a buscar o menor número de
+acessos ao disco para acessar efetivamente o registro requisitado. A altura
+dessa estrutura de árvores está no intervalo de $[log_{2t-1}\ n+1,\ log_t\
+\frac{n + 1}{2}]$, onde $t$ é a ordem da árvore que indica a quantidade mínima
+de registros armazenados em um nó e $n$ a quantidade de elementos
+\cite{clrs:22}. Com isso, a quantidade de acessos a páginas do disco é de
+complexidade $O(log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer os
+registros dentro de cada nó, compondo no final a complexidade de $O(t\ log_t n)$
+para buscas~\cite{clrs:22,kpm:10}. Por isso, são parte integrante da estrutura
+central do projeto, pois permitem a indexação eficiente de cada composição a
+partir de uma chave de identificação única, representado na
+Tabela~\ref{tab:complexidades}.
 
-The subsection titles must be in boldface, 12pt, flush left.
+\begin{table}[ht]
+\centering
+\caption{Tabela de Complexidades das Árvores B e B\nolinebreak+}
+\label{tab:complexidades}
+\begin{tabular}{|c|c|c|}
+\hline
+  Estrutura & Operação & Complexidade \\ \hline
+  \multirow{4}{*}{Árvore B} & Espaço & $O(n)$ \\ \cline{2-3} & Busca & $O(t\
+  log_t\ n)$ \\ \cline{2-3} & Inserção & $O(t\ log_t\ n)$\\ \cline{2-3} &
+  Remoção & $O(t\ log_t\ n)$ \\
+  \hline
+  \multirow{4}{*}{Árvore B\nolinebreak+} & Espaço & $O(n)$ \\ \cline{2-3} &
+  Busca & $O(t\ log_t\ n)$ \\ \cline{2-3} & Inserção & $O(t\ log_t\ n)$\\
+  \cline{2-3} & Remoção & $O(t\ log_t\ n)$\\
+  \hline
+\end{tabular}
+\end{table}
+
+Considerando a implementação, a estrutura de dados dentro das árvores B e
+B\nolinebreak+ são usadas para guardar valores e registros. Com isso, o registro
+guarda as seguintes informações:
+\begin{itemize}
+  \item Compositor (ex.: Ludwig van Beethoven);
+  \item Nome da composição (ex.: Sinfonia no. 9);
+  \item Catálogo (ex.: op. 125);
+  \item Ponteiro lógico para o caminho de um arquivo sequencial que lista o
+    caminho de todas as gravações dessa composição.
+\end{itemize}
+
+Os metadados da música, além de usados no registro, também compõem a chave de
+busca.Dessa forma os nós da árvore terão seu indexamento atrelado ao processo de
+comparações de strings por ordem lexicográfica para realizar suas operações de
+reorganização e busca.
+
+Com a problemática em mente, foi decidido o uso da linguagem C++ para a
+implementação, pois é uma linguagem de alta performance bem estabelecida. Logo,
+por haver um extenso catálogo de bibliotecas, a implementação se torna mais
+fácil, pois já existem algumas implementações de árvores B e B\nolinebreak+,
+além da biblioteca TagLib\footnote{https://taglib.org/} para leitura de
+metadados de arquivos de música.
 
 \section{Resultados}\label{sec:figs}
 
 
 Figure and table captions should be centered if less than one line
 (Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
-both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
-be Helvetica, 10 point, boldface, with 6 points of space before and after each
+both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must be
+Helvetica, 10 point, boldface, with 6 points of space before and after each
 caption.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=.5\textwidth]{fig1.jpg}
+% \includegraphics[width=.5\textwidth]{fig1.jpg}
 \caption{A typical figure}
 \label{fig:exampleFig1}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=.3\textwidth]{fig2.jpg}
-\caption{This figure is an example of a figure caption taking more than one
-  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
+%\includegraphics[width=.3\textwidth]{fig2.jpg}
+\caption{This figure is an example of a figure caption taking more than one line
+  and justified considering margins mentioned in Section~\ref{sec:figs}.}
 \label{fig:exampleFig2}
 \end{figure}
 
 In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-thick, doubled, or unnecessary framing lines. When reporting empirical data,
-do not use more decimal digits than warranted by their precision and
-reproducibility. Table caption must be placed before the table (see Table 1)
-and the font used must also be Helvetica, 10 point, boldface, with 6 points of
-space before and after each caption.
+thick, doubled, or unnecessary framing lines. When reporting empirical data, do
+not use more decimal digits than warranted by their precision and
+reproducibility. Table caption must be placed before the table (see Table 1) and
+the font used must also be Helvetica, 10 point, boldface, with 6 points of space
+before and after each caption.
 
 \begin{table}[ht]
 \centering
-\caption{Variables to be considered on the evaluation of interaction
-  techniques}
+\caption{Variables to be considered on the evaluation of interaction techniques}
 \label{tab:exTable1}
-\includegraphics[width=.7\textwidth]{table.jpg}
+% \includegraphics[width=.7\textwidth]{table.jpg}
 \end{table}
 
 \section{Conclusão}
@@ -141,16 +259,6 @@ internet, etc.). The image resolution on paper should be about 600 dpi for
 black-and-white images, and 150-300 dpi for grayscale images.  Do not include
 images with excessive resolution, as they may take hours to print, without any
 visible difference in the result. 
-
-\section{References}
-
-Bibliographic references must be unambiguous and uniform.  We recommend giving
-the author names references in brackets, e.g. \cite{knuth:84},
-\cite{boulic:91}, and \cite{smith:99}.
-
-The references must be listed using 12 point font size, with 6 points of space
-before each reference. The first line of each reference should not be
-indented, while the subsequent should be indented by 0.5 cm.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}

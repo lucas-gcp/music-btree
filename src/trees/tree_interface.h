@@ -24,6 +24,8 @@ struct BTreeData
         std::memset(catalog, 0, sizeof(catalog));
         mean_duration = 0.0f;
         num_recordings = 0;
+        mean_duration = 0.0f;
+        num_recordings = 0;
     }
 
     BTreeData(const std::string &c, const std::string &p, const std::string &cat)

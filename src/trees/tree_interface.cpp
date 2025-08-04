@@ -24,6 +24,23 @@ void TreeStrategy::insert_dir(fs::path insert_path) {
     cout << flush;
 }
 
+void TreeStrategy::insert_fake_dir(fs::path insert_path) {
+    set<BTreeData> to_insert;
+
+    read_fake_album_tags(insert_path, to_insert);
+
+    for (const auto &data : to_insert) {
+        insert(data, insert_path);
+
+        #if defined (VERBOSE)
+        cout << "Piece name: " << data.piece_name << "\n"
+                << "Composer: " << data.composer << "\n"
+                << "Catalog number: " << data.catalog << "\n";
+        #endif
+    }
+    cout << flush;
+}
+
 void TreeStrategy::insert_recording(BTreeData data, fs::path insert_path) {
     if (!fs::exists(db_path / data.composer))
         fs::create_directory(db_path / data.composer);

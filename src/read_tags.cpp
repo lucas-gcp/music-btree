@@ -3,6 +3,7 @@
 #include <string>
 #include <set>
 #include <filesystem>
+#include <fstream>
 
 #include "tpropertymap.h"
 #include "tstringlist.h"
@@ -52,6 +53,23 @@ void read_album_tags(fs::path album_path, set<BTreeData> &album_pieces) {
             BTreeData data;
             read_tags(album_entry.path(), data);
             album_pieces.insert(data);
+        }
+    }
+}
+
+void read_fake_album_tags(fs::path album_path, set<BTreeData> &album_pieces) {
+    for (auto const &album_entry : fs::directory_iterator{album_path}) {
+        ifstream f(album_entry.path());
+        
+        string piece_info;
+        while(getline(f, piece_info)) {
+            string::iterator first, second;
+            for (first = piece_info.begin(); *first != ','; first++);
+            for (second = next(first); *second != ','; second++);
+
+            BTreeData data = {string(piece_info.begin(), first), string(next(first), second), string(next(second), prev(piece_info.end()))};
+            album_pieces.insert(data);
+            // cout << data.composer << " " << data.piece_name << " " << data.catalog << endl;
         }
     }
 }

@@ -6,6 +6,7 @@ taglib
 *.o
 *.exe
 program
+benchmark
 
 *.flac
 
@@ -16,3 +17,10 @@ article/*
 !article/main.tex
 !article/bibliography.bib
 !article/figuras
+
+fake-music/
+index/
+btree.db
+
+B_benchmark_db
+BP_benchmark_db

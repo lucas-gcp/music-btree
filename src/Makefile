@@ -2,10 +2,13 @@ CPP = g++ -O3 -std=c++20
 INCLUDES = -I../taglib/include/ -I../taglib/include/taglib -Itrees/bptree
 LIB = -L../taglib/lib -ltag -lz
 
-all: program
+all: program benchmark
 
 program: bptree read_tags.o tree_interface.o main.o
 	$(CPP) $(INCLUDES) read_tags.o property.o tree_interface.o main.o -o program $(LIB)
+
+benchmark: bptree read_tags.o tree_interface.o benchmark.o
+	$(CPP) $(INCLUDES) read_tags.o property.o tree_interface.o benchmark.o -o benchmark $(LIB)
 
 read_tags.o: read_tags.cpp read_tags.h
 	$(CPP) $(INCLUDES) -c read_tags.cpp
@@ -20,3 +23,6 @@ property.o: trees/bptree/property.cpp
 
 main.o: main.cpp trees/bptree/bplustree.hpp
 	$(CPP) $(INCLUDES) -c main.cpp
+
+benchmark.o: benchmark.cpp
+	$(CPP) $(INCLUDES) -c benchmark.cpp

@@ -63,6 +63,8 @@ public:
 
     void insert_dir(fs::path insert_path);
 
+    void insert_fake_dir(fs::path insert_path);
+    
     void insert_recording(BTreeData data, fs::path insert_path);
 
     void get_recordings(BTreeData data);

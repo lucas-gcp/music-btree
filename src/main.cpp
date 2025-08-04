@@ -8,6 +8,8 @@
 #include "trees/btree/btree.h"
 #include "trees/bptree/bplustree.hpp"
 
+#define VERBOSE
+
 using namespace std;
 namespace fs = filesystem;
 

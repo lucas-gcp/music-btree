@@ -12,4 +12,6 @@ void read_tags(fs::path music_path, BTreeData &data);
 
 void read_album_tags(fs::path album_path, set<BTreeData> &album_pieces);
 
+void read_fake_album_tags(fs::path album_path, set<BTreeData> &album_pieces);
+
 #endif

@@ -50,54 +50,64 @@ Paulo Bezerra\inst{1}, Stephania Ferreira\inst{1}, Tales Bartolome\inst{1}}
 
 
 \section{Revisão Bibliográfica} \label{sec:revisao}
+Esta seção apresenta a fundamentação teórica das estruturas de dados utilizadas,
+bem como outros trabalhos relacionados ao tema do presente trabalho.
+
+\subsection{Fundamentação Teórica}
+Tendo em vista o uso de árvores B neste trabalho, esta seção tem como objetivo 
+apresentar esta estrutura, sua utilidade e alguns resultados essenciais.
 
 Durante o processo de manutenção de uma base de dados, um dos maiores custos
-operacionais é o de acesso à memória secundária. O acesso à memória secundária
-toma um tempo de ordens de magnitude maior do que o tempo que o processador leva
-em instruções simples como de comparação de valores. No entanto, qualquer
-aplicação relevante trabalhará com uma quantidade de dados muito maior do que a
-capacidade da memória principal financeiramente viável, o que torna o acesso ao
-disco uma operação fundamental para o processamento de qualquer base de dados e,
-ao pensarmos na otimização de tal processamento, a diminuição da quantidade
-destes acessos ao disco pode se tornar o principal fator para o ganho de
-performance operacional.
+operacionais é o de acesso à memória secundária.
+O acesso à memória secundária toma um tempo de ordens de magnitude maior do que
+o tempo que o processador leva em instruções simples como de comparação de valores.
+No entanto, diversas aplicações trabalham com uma quantidade de dados muito maior
+do que a capacidade da memória principal financeiramente viável, o que torna o
+acesso ao disco uma operação fundamental para o processamento de qualquer base
+de dados e, ao pensarmos na otimização de tal processamento, a diminuição da
+quantidade destes acessos ao disco pode se tornar o principal fator para o ganho
+de performance operacional~\cite{clrs:22}.
 
-É possível a utilização de duas estratégias para que se tenha a diminuição de
-acessos ao disco: considerar um subconjunto de dados cada vez menor a cada
-comparação e trazer para a memória principal a maior quantidade possível de
-valores a cada acesso à memória secundária. Para trabalhar com subconjuntos cada
-vez menores de dados, é necessária a utilização de índices, de modo que cada
-registro possa ser acessado por meio de um índice único, armazenado em uma
-estrutura sequencial e ordenada, que permitirá o acesso aleatório aos registros.
-Pela comparação entre um determinado índice e o índice do elemento procurado,
-pode-se fazer uma busca em um subconjunto cada vez menor, delimitado por um
-intervalo de índices de amplitude menor àquelas referentes aos subconjuntos
-considerados em comparações anteriores. Já para trazer da memória secundária a
-maior quantidade possível de valores a cada acesso ao disco, será necessária uma
-estrutura de dados específica que tenha isso como objetivo, como a árvore B e
-suas variantes.
+Uma das soluções mais usadas para otimizar operações em memória secundária é o
+uso de árvores B e suas variantes~\cite{Co:79}. Estas estruturas são árvores
+nas quais cada nó pode armazenar mais que um registro, diferentemente das
+árvores binárias.
 
-Como apontado por Comer em seu artigo de 1979 \cite{cd:79}, a árvore B é uma
-estrutura de dados utilizada para a organização de um arquivo e os índices
-(também chamados chaves) de seus registros. Além disso, é uma generalização das
-árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
-nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
-\le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
-as operações de busca, inserção e remoção crescem em proporção logarítmica com o
-aumento de registros do arquivo, o que representa um custo operacional
-relativamente baixo~\cite{cd:79}.
+Elas são definidas de modo que, considerando uma árvore não vazia de ordem
+$d \in \mathbb{N}$, a raiz seja uma folha ou tenha no mínimo dois filhos, cada
+nó diferente da raiz e das folhas possua entre $d+1$ e $2d +1$ filhos e todas as
+folhas estejam no mesmo nível.
+Além disso, pode-se concluir que cada nó que não é a raiz contém entre $d$ e $2d$
+chaves e a altura $h$ da árvore está no intervalo
+\[ \log_{2d+1} (n+1) \leq h \leq 1 + \log_{d+1} \left(\frac{n + 1}{2}\right)~\cite{SwMa:10}. \]
 
-Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
-Apesar disso, seguindo as regras que definem a estrutura da árvore e seu
-balanceamento, em cada acesso é recuperado da memória não um registro, mas uma
-página de registros, de modo a se atingir uma pequena quantidade de acessos ao
-disco e a otimização dos processos de manipulação de registros do arquivo.
+A característica de altura logarítmica se mostra muito importante, pois faz com
+que operações de inserção e busca também tenham custo logarítimico.
+Ademais, a possibilidade de armazenar diversas chaves em cada nó é adequada para
+armazenamento em memória secundária pois possibilita tratar um nó como uma página % XXX o que é uma página?
+em disco, de modo que a quantidade de leituras em memória secundária é minimizada~\cite{Kn:98}.
 
-Enquanto isso, a árvore B+ é uma variação da árvore B, onde possui como
-diferencial a ausência de registros em nós da estrutura que não são folhas, ou
-seja, os registros estão apenas contidas nas folhas e as chaves estarão nos
-outros nós, sendo estas do mesmo tipo dos registros, mas não  armazenados na
-estrutura, tendo um papel de guia na busca efetuada na árvore \cite{kpm:10}.
+
+% Como apontado por Comer em seu artigo de 1979 \cite{Co:79}, a árvore B é uma
+% estrutura de dados utilizada para a organização de um arquivo e os índices
+% (também chamados chaves) de seus registros. Além disso, é uma generalização das
+% árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
+% nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
+% \le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
+% as operações de busca, inserção e remoção crescem em proporção logarítmica com o
+% aumento de registros do arquivo, o que representa um custo operacional
+% relativamente baixo~\cite{Co:79}.
+
+% Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
+% Apesar disso, seguindo as regras que definem a estrutura da árvore e seu
+% balanceamento, em cada acesso é recuperado da memória não um registro, mas uma
+% página de registros, de modo a se atingir uma pequena quantidade de acessos ao
+% disco e a otimização dos processos de manipulação de registros do arquivo.
+
+Já a árvore B+ é uma variação da árvore B, possuindo como
+diferencial a ausência de registros em nós não-folha da estrutura, ou seja,
+os registros estão contidos apenas nas folhas e as chaves estarão nos nós internos,
+tendo um papel de guia na busca efetuada na árvore~\cite{Pm:10}.
 
 \section{Problema de Pesquisa}
 
@@ -168,7 +178,7 @@ de registros armazenados em um nó e $n$ a quantidade de elementos
 \cite{clrs:22}. Com isso, a quantidade de acessos a páginas do disco é de
 complexidade $O(\log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer os
 registros dentro de cada nó, compondo no final a complexidade de $O(t \log_t n)$
-para buscas~\cite{clrs:22,kpm:10}. Por isso, são parte integrante da estrutura
+para buscas~\cite{clrs:22,Pm:10}. Por isso, são parte integrante da estrutura
 central do projeto, pois permitem a indexação eficiente de cada composição a
 partir de uma chave de identificação única, representado na
 Tabela~\ref{tab:complexidades}.
@@ -219,41 +229,6 @@ metadados de arquivos de música.
 
 \section{Resultados}\label{sec:figs}
 
-
-Figure and table captions should be centered if less than one line
-(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
-both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must be
-Helvetica, 10 point, boldface, with 6 points of space before and after each
-caption.
-
-\begin{figure}[ht]
-\centering
-% \includegraphics[width=.5\textwidth]{fig1.jpg}
-\caption{A typical figure}
-\label{fig:exampleFig1}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-%\includegraphics[width=.3\textwidth]{fig2.jpg}
-\caption{This figure is an example of a figure caption taking more than one line
-  and justified considering margins mentioned in Section~\ref{sec:figs}.}
-\label{fig:exampleFig2}
-\end{figure}
-
-In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-thick, doubled, or unnecessary framing lines. When reporting empirical data, do
-not use more decimal digits than warranted by their precision and
-reproducibility. Table caption must be placed before the table (see Table 1) and
-the font used must also be Helvetica, 10 point, boldface, with 6 points of space
-before and after each caption.
-
-\begin{table}[ht]
-\centering
-\caption{Variables to be considered on the evaluation of interaction techniques}
-\label{tab:exTable1}
-% \includegraphics[width=.7\textwidth]{table.jpg}
-\end{table}
 
 \section{Conclusão}
 

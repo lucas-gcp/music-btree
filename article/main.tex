@@ -44,12 +44,51 @@ Paulo Bezerra\inst{1}, Stephania Ferreira\inst{1}, Tales Bartolome\inst{1}}
   do artigo.
 \end{resumo}
 
-\section{Introdução} 
+\section{Introdução}
+Dentro da música clássica, peças canônicas são gravadas centenas de vezes e,
+para grande parte dos ouvintes, a escuta atenta de diferentes gravações é um
+processo importante, permitindo a comparação das nuances de cada gravação~\cite{Bl:25}.
+Assim, um sistema que permita a busca de gravações de uma música é essencial.
+No entanto, como apontado por Blakeley~\cite{Bl:25}, os serviços de \emph{streaming},
+que permitem acesso instantêneo e ilimitado a um grande catálogo de músicas, não
+possuem funcionalidades focadas em pesquisa de música clássica, tendo como foco
+maior a música popular.
+Assim sendo, a busca de música clássica nestes serviços é difícil e imprecisa, 
+além de possuírem uma interface que não está alinhada a este estilo.
+Por causa disso, as necessidades dos ouvintes de música clássica não são supridas
+pelos grandes serviços de streaming, como Spotify, Deezer e Youtube Music.
+
+Tendo isso em vista, serviços dedicados à música clássica, tais como
+IDAGIO, Apple Music Classical e Presto Music, foram criados e permitem busca
+especializada, separando músicas de gravações, e interface considerando esta
+divisão~\cite{Bl:25}.
+Apesar de isto representar um avanço, a quantidade de plataformas ainda é pequena
+e muitas delas ainda não estão bem estabelecidas, pois é um mercado nichado, e 
+não há alternativas de código aberto, todas são iniciativas privadas e sem
+detalhes acerca da implementação~\cite{Bl:25}.
+
+Com base nisso, este trabalho objetiva implementar uma base de dados dedicada
+para busca de peças de música clássica, de modo a permitir acesso mais
+democratizado a um sistema de busca, visando impulsionar o desenvolvimento de
+novas soluções para este problema.
+Para isso, serão utilizadas árvores B e B+ para a organização das informações,
+pois estas são algumas das principais estruturas usadas no armazenamento de
+informações em memória secundária~\cite{Co:79}.
+
+O restante do artigo está organizado da seguinte forma:
+a Seção~\ref{sec:revisao} apresenta informações sobre as árvores B e B+ e
+trabalhos relacionados ao tema de pesquisa, a Seção~\ref{sec:problem} apresenta
+em mais detalhes o problema de pesquisa. A Seção~\ref{sec:implementation}
+descreve a implementação e as decisões tomadas para tal. A Seção~\ref{sec:results}
+apresenta os resultados obtidos sobre a eficiência das implementações.
+Por fim, a Seção~\ref{sec:conclusion} conclui o trabalho, com considerações
+gerais e possibilidades de trabalhos futuros de modo a melhor explorar a temática.
+
 
 
 \section{Revisão Bibliográfica} \label{sec:revisao}
 Esta seção apresenta a fundamentação teórica das estruturas de dados utilizadas,
-bem como outros trabalhos relacionados ao tema do presente trabalho.
+bem como outros trabalhos relacionados ao tema do presente artigo.
 
 \subsection{Fundamentação Teórica}
 Tendo em vista o uso de árvores B neste trabalho, esta seção tem como objetivo 
@@ -153,7 +192,7 @@ voltada ao estilo de busca específica, focada.
 
 
 
-\section{Problema de Pesquisa}
+\section{Problema de Pesquisa} \label{sec:problem}
 
 Levando em consideração o contexto de músicas clássicas, uma composição, feita
 por um único compositor, possui diversas interpretações por diferentes músicos.
@@ -202,7 +241,7 @@ locais. Além disso, abre a possibilidade de empresas já estabelecidas no merca
 de criarem soluções embasadas para uma disponibilidade de funcionalidades mais
 ampla dentre plataformas, desincentivando o monopólio da área.
 
-\section{Implementação}
+\section{Implementação} \label{sec:implementation}
 
 A implementação baseia-se na ideia de uma árvore de busca para o indexamento de
 músicas clássicas, permitindo a obtenção de todas as gravações pelo termo de
@@ -251,7 +290,7 @@ biblioteca TagLib\footnote{\url{https://taglib.org/}}, para a leitura de
 metadados de arquivos de música. Isso resultou numa implementação mais simples,
 garantindo um código conciso e bem estruturado.
 
-\section{Resultados}\label{sec:figs}
+\section{Resultados} \label{sec:results}
 As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta é
 grande suficiente para não caber por completo na memória principal e precisa ser
 acessado da memória secundária. Elas agem de maneira a buscar o menor número de
@@ -288,7 +327,7 @@ Tabela~\ref{tab:complexidades}.
 \end{table}
 
 
-\section{Conclusão}
+\section{Conclusão} \label{sec:conclusion}
 
 
 

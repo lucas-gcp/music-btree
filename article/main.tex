@@ -44,9 +44,7 @@ Paulo Bezerra\inst{1}, Stephania Ferreira\inst{1}, Tales Bartolome\inst{1}}
   do artigo.
 \end{resumo}
 
-
 \section{Introdução} 
-
 
 
 \section{Revisão Bibliográfica} \label{sec:revisao}
@@ -170,6 +168,46 @@ B\nolinebreak+ persistentes, permitindo que crie-se uma comparação direta entr
 a eficiência em termos de complexidade de tempo, espaço e facilidade de
 implementação.
 
+Considerando a implementação, a estrutura de dados dentro das árvores B e
+B\nolinebreak+ são usadas para guardar valores e registros. Com isso, o registro
+guarda as seguintes informações:
+\begin{itemize}
+  \item Compositor (ex.: Ludwig van Beethoven);
+  \item Nome da composição (ex.: Sinfonia no. 9);
+  \item Catálogo (ex.: op. 125);
+\end{itemize}
+
+Além dessa estrutura, os metadados da música também compõem a própria chave,
+sendo a chave composta como a concatenação do Compositor e do Catálogo (ex:
+"Ludwig van Beethoven125"). Com isso, o principal valor de busca presente no
+valor dos elementos da árvore é o nome da composição. Com isso, a árvore serve
+como um indexamento de dados atrelados a um conjunto de gravações, cabendo o
+acréscimo de informações de outros tipos de metadados, como duração média,
+quantidade de gravações, etc.
+
+Além disso, é criado dinâmicamente um arquivo único para cada composição que
+contém uma listagem sequencial de todas as gravações dessa composição
+analisadas. Esse arquivo é armazenado na memória secundária com o caminho
+atrelado aos metadados armazenados na árvore. A decisão da sequencialidade do
+arquivo digital justifica-se pelo objetivo final da listagem de todas as
+gravações, simplificando a implementação do projeto.
+
+Com a problemática em mente, foi decidida a implementação do programa utilizando
+a linguagem C++, pois ela apresenta um conjunto de características
+imprescindíveis para o projeto. A principal característica é sua alta
+performance, provindo da sua natureza de compilação \emph{Ahead-of-Time} (AOT).
+O quesito de tempo de execução é essencial para o projeto, já que o propósito é
+uma ferramenta eficiente de busca. Outra característica da linguagem que
+facilita a implementação é sua vasta quantidade de bibliotecas que incorporam
+partes essenciais do código elaborado neste artigo.
+
+As duas bibliotecas utilizadas foram o Tipo Abstrato de Dados (TAD) da árvore
+B+\footnote{\url{https://github.com/ByJuanDiego/disk-b-plus-tree}} e a
+biblioteca TagLib\footnote{\url{https://taglib.org/}}, para a leitura de
+metadados de arquivos de música. Isso resultou numa implementação mais simples,
+garantindo um código conciso e bem estruturado.
+
+\section{Resultados}\label{sec:figs}
 As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta é
 grande suficiente para não caber por completo na memória principal e precisa ser
 acessado da memória secundária. Elas agem de maneira a buscar o menor número de
@@ -205,32 +243,41 @@ Tabela~\ref{tab:complexidades}.
 \end{tabular}
 \end{table}
 
-Considerando a implementação, a estrutura de dados dentro das árvores B e
-B\nolinebreak+ são usadas para guardar valores e registros. Com isso, o registro
-guarda as seguintes informações:
-\begin{itemize}
-  \item Compositor (ex.: Ludwig van Beethoven);
-  \item Nome da composição (ex.: Sinfonia no. 9);
-  \item Catálogo (ex.: op. 125);
-  \item Ponteiro lógico para o caminho de um arquivo sequencial que lista o
-    caminho de todas as gravações dessa composição.
-\end{itemize}
 
-Os metadados da música, além de usados no registro, também compõem a chave de
-busca.
-Dessa forma os nós da árvore terão seu indexamento atrelado ao processo de
-comparações de strings por ordem lexicográfica para realizar suas operações de
-reorganização e busca.
+Figure and table captions should be centered if less than one line
+(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
+both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must be
+Helvetica, 10 point, boldface, with 6 points of space before and after each
+caption.
 
-Com a problemática em mente, foi decidido o uso da linguagem C++ para a
-implementação, pois é uma linguagem de alta performance bem estabelecida. Logo,
-por haver um extenso catálogo de bibliotecas, a implementação se torna mais
-fácil, pois já existem algumas implementações de árvores B e B\nolinebreak+,
-além da biblioteca TagLib\footnote{\url{https://taglib.org/}} para leitura de
-metadados de arquivos de música.
+\begin{figure}[ht]
+\centering
+% \includegraphics[width=.5\textwidth]{fig1.jpg}
+\caption{A typical figure}
+\label{fig:exampleFig1}
+\end{figure}
 
-\section{Resultados}\label{sec:figs}
+\begin{figure}[ht]
+\centering
+%\includegraphics[width=.3\textwidth]{fig2.jpg}
+\caption{This figure is an example of a figure caption taking more than one line
+  and justified considering margins mentioned in Section~\ref{sec:figs}.}
+\label{fig:exampleFig2}
+\end{figure}
 
+In tables, try to avoid the use of colored or shaded backgrounds, and avoid
+thick, doubled, or unnecessary framing lines. When reporting empirical data, do
+not use more decimal digits than warranted by their precision and
+reproducibility. Table caption must be placed before the table (see Table 1) and
+the font used must also be Helvetica, 10 point, boldface, with 6 points of space
+before and after each caption.
+
+\begin{table}[ht]
+\centering
+\caption{Variables to be considered on the evaluation of interaction techniques}
+\label{tab:exTable1}
+% \includegraphics[width=.7\textwidth]{table.jpg}
+\end{table}
 
 \section{Conclusão}
 

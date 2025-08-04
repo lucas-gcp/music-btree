@@ -85,6 +85,30 @@ Ademais, a possibilidade de armazenar diversas chaves em cada nó é adequada pa
 armazenamento em memória secundária pois possibilita tratar um nó como uma página % XXX o que é uma página?
 em disco, de modo que a quantidade de leituras em memória secundária é minimizada~\cite{Kn:98}.
 
+% Como apontado por Comer em seu artigo de 1979 \cite{Co:79}, a árvore B é uma
+% estrutura de dados utilizada para a organização de um arquivo e os índices
+% (também chamados chaves) de seus registros. Além disso, é uma generalização das
+% árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
+% nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
+% \le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
+% as operações de busca, inserção e remoção crescem em proporção logarítmica com o
+% aumento de registros do arquivo, o que representa um custo operacional
+% relativamente baixo~\cite{Co:79}.
+
+% Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
+% Apesar disso, seguindo as regras que definem a estrutura da árvore e seu
+% balanceamento, em cada acesso é recuperado da memória não um registro, mas uma
+% página de registros, de modo a se atingir uma pequena quantidade de acessos ao
+% disco e a otimização dos processos de manipulação de registros do arquivo.
+
+Já a árvore B+ é uma variação da árvore B, possuindo como
+diferencial a ausência de registros em nós não-folha da estrutura, ou seja,
+os registros estão contidos apenas nas folhas e as chaves estarão nos nós internos,
+tendo um papel de guia na busca efetuada na árvore.
+Além disso, os nós folha da árvore são ligados, de modo que é possível percorrer
+os registros armazenados na árvore sequencialmente~\cite{Pm:10}.
+
+
 \subsection{Trabalhos Relacionados}
 
 A indexação de pesquisas é um problema amplamente discutido em artigos ao longo
@@ -128,28 +152,6 @@ tempo em uma busca ou não, onde a implementação de árvores B e B + está sen
 voltada ao estilo de busca específica, focada.
 
 
-% Como apontado por Comer em seu artigo de 1979 \cite{Co:79}, a árvore B é uma
-% estrutura de dados utilizada para a organização de um arquivo e os índices
-% (também chamados chaves) de seus registros. Além disso, é uma generalização das
-% árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
-% nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
-% \le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
-% as operações de busca, inserção e remoção crescem em proporção logarítmica com o
-% aumento de registros do arquivo, o que representa um custo operacional
-% relativamente baixo~\cite{Co:79}.
-
-% Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
-% Apesar disso, seguindo as regras que definem a estrutura da árvore e seu
-% balanceamento, em cada acesso é recuperado da memória não um registro, mas uma
-% página de registros, de modo a se atingir uma pequena quantidade de acessos ao
-% disco e a otimização dos processos de manipulação de registros do arquivo.
-
-Já a árvore B+ é uma variação da árvore B, possuindo como
-diferencial a ausência de registros em nós não-folha da estrutura, ou seja,
-os registros estão contidos apenas nas folhas e as chaves estarão nos nós internos,
-tendo um papel de guia na busca efetuada na árvore.
-Além disso, os nós folha da árvore são ligados, de modo que é possível percorrer
-os registros armazenados na árvore sequencialmente~\cite{Pm:10}.
 
 \section{Problema de Pesquisa}
 
@@ -286,49 +288,9 @@ Tabela~\ref{tab:complexidades}.
 \end{table}
 
 
-Figure and table captions should be centered if less than one line
-(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
-both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must be
-Helvetica, 10 point, boldface, with 6 points of space before and after each
-caption.
-
-\begin{figure}[ht]
-\centering
-% \includegraphics[width=.5\textwidth]{fig1.jpg}
-\caption{A typical figure}
-\label{fig:exampleFig1}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-%\includegraphics[width=.3\textwidth]{fig2.jpg}
-\caption{This figure is an example of a figure caption taking more than one line
-  and justified considering margins mentioned in Section~\ref{sec:figs}.}
-\label{fig:exampleFig2}
-\end{figure}
-
-In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-thick, doubled, or unnecessary framing lines. When reporting empirical data, do
-not use more decimal digits than warranted by their precision and
-reproducibility. Table caption must be placed before the table (see Table 1) and
-the font used must also be Helvetica, 10 point, boldface, with 6 points of space
-before and after each caption.
-
-\begin{table}[ht]
-\centering
-\caption{Variables to be considered on the evaluation of interaction techniques}
-\label{tab:exTable1}
-% \includegraphics[width=.7\textwidth]{table.jpg}
-\end{table}
-
 \section{Conclusão}
 
-All images and illustrations should be in black-and-white, or gray tones,
-excepting for the papers that will be electronically available (on CD-ROMs,
-internet, etc.). The image resolution on paper should be about 600 dpi for
-black-and-white images, and 150-300 dpi for grayscale images.  Do not include
-images with excessive resolution, as they may take hours to print, without any
-visible difference in the result. 
+
 
 \bibliographystyle{sbc}
 \bibliography{bibliography}

@@ -51,7 +51,7 @@ processo importante, permitindo a comparação das nuances de cada gravação~\c
 Assim, um sistema que permita a busca de gravações de uma música é essencial.
 Os serviços de \emph{streaming} permitem acesso instantêneo e ilimitado a um
 grande catálogo de músicas, facilitando o processo de escuta~\cite{MoVi:18}.
-No entanto poucas plataformas de streaming possuem funcionalidades focadas em
+No entanto poucas plataformas de \emph{streaming} possuem funcionalidades focadas em
 pesquisa de música clássica, tendo como foco maior a música popular~\cite{Bl:25}.
 Assim sendo, a busca de música clássica nestes serviços é difícil e imprecisa, 
 além de possuírem uma interface que não está alinhada a este estilo.
@@ -149,60 +149,54 @@ os registros armazenados na árvore sequencialmente~\cite{Pm:10}.
 
 
 \subsection{Trabalhos Relacionados}
+Esta seção apresenta trabalhos relacionados a métodos de busca e indexação de 
+músicas.
 
 A indexação de pesquisas é um problema amplamente discutido em artigos ao longo
 das décadas por conta de suas aplicabilidades no uso dos computadores,
 principalmente com a emersão dos serviços de busca e \emph{streaming}.
 
-O artigo "Music search engines: Specifications and challenges" discute como
-aborda o crescente campo de pesquisa dos motores de busca de música (\emph{Music
-Search Engines}), motivado pelo crecimento exponencial da quantidade de músicas
-disponíveis na internet e publicadas diariamente. Os autores abordam as
-principais funcionalidades.
-
-
-Existem muitos estudos focados no desenvolvimento de métodos de indexação
-e no desenvolvimento de mecanismos eficientes de busca de músicas, que já são
-aplicados de acordo com determinados critérios. Alguns dos critérios comuns,
-que são relativamente antigos mas perpetuados na busca em serviços de \emph{streaming}
-da atualidade, são evidenciados por  Nanopoulos et al. em seu artigo de 2009 \cite{NaRaRuMa:09}. Nele, é
-dissertado sobre diferentes formas de realizar a busca por música em alguns
-serviços como Allmusic, Yahoo!Music, iTunes e entre outros. Dentre elas,
-pode-se apontar a busca por metadados relacionados a músicas (biografia de
-artista, novos lançamentos, análises e entre outros), através de letra de música
+O artigo de Nanopoulos et al. de 2009 discute o crescente campo de pesquisa dos
+mecanismos de busca de música (\emph{Music Search Engines}), motivado pelo
+crecimento exponencial da quantidade de músicas disponíveis na internet.
+Os autores descrevem alguns dos critérios comuns para busca de músicas, que são
+aplicados ainda atualmente em serviços de \emph{streaming}.
+Alguns dos métodos incluem a busca através metadados relacionados a músicas (biografia de
+artista, novos lançamentos, análises, entre outros), através de letra de música
 e, para aumentar o leque musical de um ouvinte, há a recomendação de músicas
-similares a escutadas e geração de playlists automáticas. As duas formas
-apontadas de busca são por texto, por meio dos metadados, ou “smart words”, que
-associam a músicas para certas ocasiões (músicas para ouvir no carro ou músicas
-alegres) ou característica de voz de tal artista ou a tags, ou busca por áudio,
-que nos serviços da atualidade não são muito utilizados.
+similares a escutadas e geração de playlists automáticas.
+As duas formas apontadas de busca são por texto - por meio dos metadados, ou “smart words”,
+que associam músicas a certas ocasiões (``músicas para ouvir no carro'' ou ``músicas
+alegres'') - ou por conteúdo, incluindo características da música obtidas pelo áudio.
 
-Na atualidade, os serviços de \emph{streaming} de música, como indicado Li et al. no seu
-artigo de 2019 \cite{LiThChToGa:19}, os mecanismos de busca, para manter certa qualidade precisam
-balancear o específico do abrangente, em que dependendo do indivíduo que irá
-pesquisar, ele terá uma mentalidade diferente no que deseja, que, de acordo com o artigo
-mencionado, pode ser dividida em dois grupos: focada e não focada. O usuário com
-a mente focada, ao efetuar uma busca, procura algo em particular, que seria agregado com o projeto, em
-especificidade no gênero de música clássica, enquanto o não focado possui uma
-ideia vaga do que busca, estando aberto a sugestões, efetuando pesquisas com frases mais subjetidas,
-como apresentada por Nanopoulos et al. Diante disso, é mostrado a
-necessidade da caracterização destes grupos e como cada usuário se enquadra em
-cada um ou seus hábitos dependendo do meio que é inserido, desde gastar mais
-tempo em uma busca ou não, onde a implementação de árvores B e B + está sendo
-voltada ao estilo de busca específica, focada.
+Na atualidade, os serviços de \emph{streaming} de música, como indicam Li et al. no seu
+artigo de 2019 \cite{LiThChToGa:19}, precisam balancear mecanismos de busca específicos
+e abrangentes a depender do usuário em questão.
+Neste artigo, é feita a divisão em dois grupos: usuários focados e não focados.
+O usuário com a mente focada, ao efetuar uma busca, procura algo em particular,
+enquanto o não focado possui uma ideia vaga do que busca, estando aberto a
+sugestões e efetuando pesquisas com frases mais subjetidas, reforçando alguns
+dos métodos apresentados por Nanopoulos et al.
 
-Outro artigo que propõe uma diferente alternativa para os métodos de pesquisa
-usuais é o \emph{Pied Piper}, proposto por Malhotra et al. \cite{MaRa:22},
+O método de busca utilizado neste trabalho visa um usuário focado, que já tem
+conhecimento sobre que música deseja escutar e busca gravações específicas.
+Assim, buscamos aperfeiçoar o conceito de busca focada, que, no contexto de Li et al.,
+foi apresentado visando músicas em geral, para a música clássica.
+
+Outro artigo que propõe uma alternativa para os métodos de pesquisa
+usuais é o de Malhotra et al. (2022), com o algoritmo \emph{Pied Piper},
 que apresenta um mecanismo de meta-busca de música \emph{pop} baseando-se em
 três fatores: letras, metadados (como nome da música, artista, álbum, ano de
-lançamento, andamento da música, tom, etc) e áudio (trechos ou gravações). Com
-isso, foi proposto uma nova perspectiva que possibilitasse extrapolar as
+lançamento, andamento da música, tom, etc) e áudio (trechos ou gravações).
+Com isso, foi proposta uma nova perspectiva que possibilitasse extrapolar as
 limitações existentes em mecanismos clássicos de busca. Um dos diferenciais do
 modelo seria a integração da busca de áudio, baseada no método conhecido como
 \emph{Sequence-to-sequence Autoencoder Model for Audio Fingerprinting} (SAMAF)
 \cite{Ba+:20}, que cria uma "digital" única para cada música, utilizada
 em aplicativos como Shazam para identificar a música utilizando apenas trechos
 curtos.
+O método descrito aqui difere destes por ser exclusivamente baseado em metadados
+textuais.
 
 \section{Problema de Pesquisa} \label{sec:problem}
 
@@ -237,11 +231,11 @@ algoritmo de pesquisa especificamente para este nicho. Apesar disso, por se
 tratar de um nicho limitado, há a grande iminência de um monopólio, por
 existirem um número baixo de plataformas com funcionalidades voltadas para
 ouvintes de música clássica. O principal exemplo desse movimento foi a aquisição
-da antiga Primephonic pela Apple, criando a Apple Music Classical. Com isso,
-abre-se o debate de se uma empresa privada com alcance de usuários diversificado
-manteria a qualidade do serviço tendo em mente ser uma empresa privada que visa
-primariamente o lucro, onde uma possível queda de ouvintes poderia tender a
-abolição dessas funcionalidades e do desenvolvimento desse setor.
+da antiga Primephonic pela Apple, criando a Apple Music Classical.
+Com isso, surge a preocupação da estabilidade de um serviço de \emph{streaming}
+nichado, como é o caso das plataformas dedicadas para música clássica, nas mãos
+de uma empresa privada, que pode encerrar as atividades do serviço em caso de
+diminuição da quantidade de ouvintes, posto que isso prejudicaria o lucro~\cite{Bl:25}.
 
 Dado o exposto, este artigo cria uma implementação na seção seguinte de uma aplicação
 computacional com o intuito de expandir o acesso a algoritmos especializados para busca
@@ -256,10 +250,12 @@ ampla dentre as plataformas, que resulta em refinamento nos seus mecanismos de b
 da concentração destes sistemas em poucos serviços.
 
 \section{Implementação} \label{sec:implementation}
+Esta seção descreve as decisões de projeto tomadas para implementar as árvores
+na resolução de nosso problema de pesquisa.
 
 A implementação baseia-se na ideia de uma árvore de busca para o indexamento de
 músicas clássicas, permitindo a obtenção de todas as gravações pelo termo de
-busca, ou seja, o nome da composição. Para o desenvolvimento do sistema, foram
+busca, ou seja, informações sobre a composição. Para o desenvolvimento do sistema, foram
 utilizadas duas alternativas de estruturas de dados semelhantes, as árvores B e
 B\nolinebreak+ persistentes, permitindo que crie-se uma comparação direta entre
 a eficiência em termos de complexidade de tempo, espaço e facilidade de
@@ -291,17 +287,23 @@ gravações, simplificando a implementação do projeto.
 Com a problemática em mente, foi decidida a implementação do programa utilizando
 a linguagem C++, pois ela apresenta um conjunto de características
 imprescindíveis para o projeto. A principal característica é sua alta
-performance, provindo da sua natureza de compilação \emph{Ahead-of-Time} (AOT).
+performance, provindo da sua natureza de compilação \emph{Ahead-of-Time} (AOT),
+juntamente com a possibilidade de trabalhar mais próximo às memórias primária e
+secundária.
 O quesito de tempo de execução é essencial para o projeto, já que o propósito é
-uma ferramenta eficiente de busca. Outra característica da linguagem que
-facilita a implementação é sua vasta quantidade de bibliotecas que incorporam
-partes essenciais do código elaborado neste artigo.
+uma ferramenta eficiente de busca.
+Outra característica da linguagem que facilita a implementação é sua vasta
+quantidade de bibliotecas que incorporam partes essenciais do código elaborado neste artigo.
 
-As duas bibliotecas utilizadas foram o Tipo Abstrato de Dados (TAD) da árvore
-B+\footnote{\url{https://github.com/ByJuanDiego/disk-b-plus-tree}} e a
-biblioteca TagLib\footnote{\url{https://taglib.org/}}, para a leitura de
-metadados de arquivos de música. Isso resultou numa implementação mais simples,
-garantindo um código conciso e bem estruturado.
+Para a elaboração da implementação, foram utilizadas duas bibliotecas: 
+\begin{itemize}
+  \item ``disk-b-plus-tree''\footnote{\url{https://github.com/ByJuanDiego/disk-b-plus-tree}},
+    que implementa uma árvore B+ baseada em disco, e
+  \item ``TagLib''\footnote{\url{https://taglib.org/}},
+    que possibilita a leitura de metadados de arquivos de música.
+\end{itemize}
+O uso destas bibliotecas permitiu abstrair partes complexas da implementação,
+focando mais na aplicação envisionada.
 
 \section{Resultados} \label{sec:results}
 A presente seção descreve os resultados teóricos acerca das operações nas duas
@@ -313,6 +315,9 @@ de pior caso iguais, pois as operações são similares~\cite{Co:79}.
 Destaca-se as complexidades de busca e inserção $O(d \log_d n)$, um dos aspectos
 mais importantes destas estruturas, pois também permitem flexibilidade da estrutura
 em decorrência da inserção eficiente.
+É importante ressaltar que, por mais que a comparação de chaves textuais dependa
+de seus tamanhos, nossas chaves possuem limite de tamanho, contribuindo, no pior
+caso, apenas com um fator constante.
 
 A eficiência das árvores B é ressaltada quando se tratando do caso de armazenamento
 em memória secundária porque o maior custo está em recuperar as informações, e 
@@ -359,40 +364,40 @@ simulação comparável com casos reais.
 
 Usando essa metodologia, foram rodados diversos testes variando a quantidade de
 álbuns de 11 a 50001 para as duas árvores, armazenando o valor mínimo, médio e
-máximo para cada variação, observado pela \ref{tab:resultados}. Também, a partir
-desses valores, foram criados dois gráficos, \ref{fig:graph_insert}
-\ref{fig:graph_search}, comparando diretamente o tempo médio de inserção e busca de
-cada árvore.
+máximo para cada variação, observado pela Tabela~\ref{tab:resultados}.
+Estes resultados também estão apresentados de forma mais direta nos Gráficos das
+Figuras~\ref{fig:graph_insert} e~\ref{fig:graph_search},comparando diretamente o
+tempo médio de inserção e busca de cada árvore.
 
 \begin{table}[ht]
 \centering
-\caption{Tabela de tempo gasto (ms) em operações nas árvores B e B\nolinebreak+}
+\caption{Tabela de tempo gasto (ms) em operações nas árvores B e B e memória ocupada (bytes)\nolinebreak+}
 \label{tab:resultados}
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-  Estrutura & Álbuns & Operação & Mínimo & Médio & Máximo \\ \hline
-  \multirow{10}{*}{Árvore B} & \multirow{2}{*}{11} & Inserção & 15.0585 & 27.9099 & 47.8788 \\
-                            & & Busca    & 0.0969 & 0.167911 & 1.3125	 \\
-                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 7.0789 & 26.7159 & 96.4244 \\
-                            & & Busca    & 0.2041 & 0.283696 & 2.2549	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 5.1006 & 21.5568 & 745.005 \\
-                            & & Busca    & 0.1968 & 0.258417 & 7.2308	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 4.8288 & 18.5928 & 7220.02 \\
-                            & & Busca    & 0.1844 & 0.245400 & 3.0743	 \\
-                  \cline{2-6} &  \multirow{2}{*}{50001} & Inserção & 4.8917 & 26.7119 & 41062.2 \\
-                            & & Busca    & 0.2019 & 0.285582 & 5.2455	 \\
+  Estrutura & Álbuns & Memória & Operação & Mínimo & Médio & Máximo \\ \hline
+  \multirow{11}{*}{Árvore B} & \multirow{2}{*}{11} & \multirow{2}{*}{20512} & Inserção & 15.0585 & 27.9099 & 47.8788 \\
+                            & & & Busca    & 0.0969 & 0.167911 & 1.3125	 \\
+                  \cline{2-7} &  \multirow{2}{*}{101} & \multirow{2}{*}{135200} & Inserção & 7.0789 & 26.7159 & 96.4244\\
+                            & & & Busca    & 0.2041 & 0.283696 & 2.2549	 \\
+                  \cline{2-7} &  \multirow{2}{*}{1001} & \multirow{2}{*}{684064} & Inserção & 5.1006 & 21.5568 & 745.005 \\
+                            & & & Busca    & 0.1968 & 0.258417 & 7.2308	 \\
+                  \cline{2-7} &  \multirow{2}{*}{10001} & \multirow{2}{*}{831520} & Inserção & 4.8288 & 18.5928 & 7220.02  \\
+                            & & & Busca    & 0.1844 & 0.245400 & 3.0743	\\
+                  \cline{2-7} &  \multirow{2}{*}{50001} & \multirow{2}{*}{856096} & Inserção & 4.8917 & 26.7119 & 41062.2\\
+                            & & & Busca    & 0.2019 & 0.285582 & 5.2455	 \\
   \hline
 
-  \multirow{10}{*}{Árvore B\nolinebreak+} & \multirow{2}{*}{11} & Inserção & 8.0324 & 39.1596 & 48.9896 \\
-                            & & Busca    & 1.5894 & 2.12140 & 79.6278	 \\
-                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 9.2234 & 42.5022 & 178.4730 \\
-                            & & Busca    & 1.4827 & 1.95975 & 20.4496	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 8.2050 & 35.8312 & 780.460 \\
-                            & & Busca    & 1.5804 & 1.82577 & 8.8614	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 7.7294 & 33.0609 & 7384.99 \\
-                            & & Busca    & 1.6700 & 1.95760 & 12.3330	 \\
-                  \cline{2-6} &  \multirow{2}{*}{50001} & Inserção & 8.1941 & 37.5146 & 42112.9 \\
-                            & & Busca    & 1.6981 & 2.09856 & 336.733	 \\
+  \multirow{11}{*}{Árvore B\nolinebreak+} & \multirow{2}{*}{11} & \multirow{2}{*}{12098} & Inserção & 8.0324 & 39.1596 & 48.9896\\
+                            & & & Busca    & 1.5894 & 2.12140 & 79.6278	 \\
+                  \cline{2-7} &  \multirow{2}{*}{101} & \multirow{2}{*}{95342} & Inserção & 9.2234 & 42.5022 & 178.4730 \\
+                            & & & Busca    & 1.4827 & 1.95975 & 20.4496	 \\
+                  \cline{2-7} &  \multirow{2}{*}{1001} & \multirow{2}{*}{845314} & Inserção & 8.2050 & 35.8312 & 780.460\\
+                            & & & Busca    & 1.5804 & 1.82577 & 8.8614  \\
+                  \cline{2-7} &  \multirow{2}{*}{10001} & \multirow{2}{*}{8527230} & Inserção & 7.7294 & 33.0609 & 7384.99 \\
+                            & & & Busca    & 1.6700 & 1.95760 & 12.3330	 \\
+                  \cline{2-7} &  \multirow{2}{*}{50001} & \multirow{2}{*}{53585465} & Inserção & 8.1941 & 37.5146 & 42112.9\\
+                            & & & Busca    & 1.6981 & 2.09856 & 336.733	 \\
   \hline
 \end{tabular}
 \end{table}

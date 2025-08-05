@@ -13,7 +13,6 @@
 using namespace std;
 namespace fs = filesystem;
 
-
 int main(int argc, char **argv) {
     if (argc != 2) {
         cout << "args: benchmark <music>/<folder>" << endl;
@@ -27,7 +26,7 @@ int main(int argc, char **argv) {
     }
     
     ifstream composers_file("compositores.txt");
-    int compositions_num = 500;
+    int compositions_num = 18;
 
     // BENCHMARK BTREE
     fs::path B_db_path("B_benchmark_db");
@@ -202,7 +201,7 @@ int main(int argc, char **argv) {
             << chrono::duration<double, milli>(btree_search_end - btree_search_beg).count()/piece_count << endl;
 
     csv_out.close();
-    
+
     csv_out.open("benchmarks/benchmarks_bt.csv", std::ofstream::app);
 
     csv_out << album_count << ";" << piece_count << ";" << chrono::duration<double, milli>(bptree_insert_end - bptree_insert_beg).count() << ";"

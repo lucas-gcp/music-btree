@@ -1692,64 +1692,10 @@ K. Lee Scott
 Raymond Scott
 Gil Scott-Heron
 Alexander Scriabin
-Peter Sculthorpe
-Amy Scurria
-Humphrey Searle
-Simon Sechter
-Sholom Secunda
-Seedo
-Josef Seger
-Leif Segerstam
-Fritz Seitz
-Carlos Seixas
-Bernhard Sekles
-Thomas Selle
-Bartolomé de Selma y Salaverde
-Sohail Sen
-Jean Baptiste Senaillé
-Ramon Sender
-Ludwig Senfl
-Jacob Senleches
-José Serebrier
-Gordon Sherwood
-William Shield
-Alice Shields
-Seymour Shifrin
-Clare Shore
-Howard Shore
-Gregory Short
-Dmitri Shostakovich
-Hugh Shrapnel
-Alan Shulman
-Obadiah Shuttleworth
-Jean Sibelius
-Paul Siefert
-Martin Smolka
-Ethel Smyth
-Ragnar Søderlind
-August Söderman
 Charlotte Sohy
 Nikolay Sokolov
 Mikhail Sokolovsky
 Nahre Sol
-Charles Michael Alexis Sola
-Solage
-Juan María Solare
-Alessandro Solbiati
-Antonio Soler
-Temistocle Solera
-Jean-Pierre Solié
-Carlo Soliva
-Giovanni Sollima
-Edward Solomon
-Harry Somers
-Arthur Somervell
-Giovanni Battista Somis
-S. P. Somtow
-John Andrew Stevenson
-Robert Prescott Stewart
-Ernstalbrecht Stiebler
-William Grant Still
 Karlheinz Stockhausen
 Robert Stoepel
 Eduard Strauss
@@ -1824,20 +1770,6 @@ Harold Truscott
 Emahoy Tsegué-Maryam Guèbrou
 Julia Tsenova
 Eduard Tubin
-Tui St. George Tucker
-Henry VIII
-Erik Tulindberg
-František Tůma
-Franz Tunder
-Joaquín Turina
-Francesco Antonio Vallotti
-Francisco Valls
-David Van Tieghem
-David Van Vactor
-Jules Van Nuffel
-Komitas Vardapet
-Víctor Varela
-Edgard Varèse
 Urbán de Vargas
 Alexander Egorovich Varlamov
 Alexander Vladimirovich Varlamov
@@ -1926,22 +1858,6 @@ Judith Weir
 Hugo Weisgall
 Manfred Weiss
 Sylvius Leopold Weiss
-Michael Weiße
-Julius Weissenborn
-Dan Welcher
-John Weldon
-Egon Wellesz
-Johann Baptist Wendling
-Andreas Werckmeister
-André Werner
-Gregor Joseph Werner
-Richard Wernick
-Giaches de Wert
-Charles Wesley
-Charles Wesley junior
-Samuel Wesley
-Samuel Sebastian Wesley
-Martin Wesley-Smith
 Mark Wessel
 Peter Westergaard
 Johann Paul von Westhoff

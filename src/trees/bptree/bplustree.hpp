@@ -128,7 +128,7 @@ public:
     }
 
 
-    BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) override {
+    BTreeData search(std::string composer, std::string piece_name, std::string catalog) override {
         return btree.search(IndexData{composer.c_str(), piece_name.c_str(), catalog.c_str()})[0];
     }
 };

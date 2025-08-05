@@ -593,7 +593,7 @@ public:
         TreeStrategy::insert_recording(data, insert_path);
     }
 
-    BTreeData search_tree(std::string composer, std::string piece_name, std::string catalog) override {
+    BTreeData search(std::string composer, std::string piece_name, std::string catalog) override {
         return btree.search(composer + catalog);
     }
 };

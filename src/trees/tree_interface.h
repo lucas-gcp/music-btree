@@ -59,7 +59,7 @@ public:
 
     virtual void insert(BTreeData data, fs::path insert_path) = 0;
 
-    virtual BTreeData search_tree(string composer, string piece_name, string catalog) = 0;
+    virtual BTreeData search(string composer, string piece_name, string catalog) = 0;
 
     void insert_dir(fs::path insert_path);
 

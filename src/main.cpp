@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
             cout << "Catalog number: " << flush;
             getline(cin, catalog);
 
-            BTreeData found = treePtr->search_tree(composer, piece_name, catalog);
+            BTreeData found = treePtr->search(composer, piece_name, catalog);
             
             if (strcmp(found.catalog, "0") != 0) {
                 cout << "Found: " << found.piece_name << endl;

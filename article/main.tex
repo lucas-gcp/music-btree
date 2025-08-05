@@ -372,6 +372,90 @@ Tabela~\ref{tab:complexidades}.
 \end{tabular}
 \end{table}
 
+Foram executados \emph{benchmarks} de tempo de execução com base nas operações
+de mais importância, inserção e busca, nas duas estruturas de árvores para
+comparar objetivamente as estatísticas de cada uma. Para isso, foi executada uma
+inserção pseudo-randômica usando uma \emph{seed} pré-definida que selecionou,
+dentre uma lista extensa de compositores extraído da
+Wikipédia\footnote{\url{https://en.wikipedia.org/wiki/List_of_composers_by_name}},
+autores, e, com base numa distribuição binomial com média 20 e desvio 0,203 da
+quantidade de gravações por composição, permitindo uma simulação comparável com
+a realidade.
+
+Usando essa metodologia, foram rodados diversos testes variando a quantidade de
+álbuns de 11 a 50001 para as duas árvores, armazenando o valor mínimo, médio e
+máximo para cada variação, observado pela \ref{tab:resultados}. Também, a partir
+desses valores, foram criados dois gráficos, \ref{fig:graph_insert}
+\ref{fig:graph_search}, comparando diretamente o tempo médio de inserção e busca de
+cada árvore.
+
+\begin{table}[ht]
+\centering
+\caption{Tabela de tempo gasto (ms) em operações nas árvores B e B\nolinebreak+}
+\label{tab:resultados}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+  Estrutura & Álbuns & Operação & Mínimo & Médio & Máximo \\ \hline
+  \multirow{10}{*}{Árvore B} & \multirow{2}{*}{11} & Inserção & 15.0585 & 27.9099 & 47.8788 \\
+                            & & Busca    & 0.0969 & 0.167911 & 1.3125	 \\
+                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 7.0789 & 26.7159 & 96.4244 \\
+                            & & Busca    & 0.2041 & 0.283696 & 2.2549	 \\
+                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 5.1006 & 21.5568 & 745.0050 \\
+                            & & Busca    & 0.1968 & 0.258417 & 7.2308	 \\
+                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 4.8288 & 18.5928 & 7220.0200 \\
+                            & & Busca    & 0.1844 & 0.245400 & 3.0743	 \\
+                  \cline{2-6} &  \multirow{2}{*}{50001} & Inserção & 4.8917 & 26.7119 & 41062.2 \\
+                            & & Busca    & 0.2019 & 0.285582 & 5.2455	 \\
+  \hline
+
+  \multirow{10}{*}{Árvore B\nolinebreak+} & \multirow{2}{*}{11} & Inserção & 8.0324 & 39.1596 & 48.9896 \\
+                            & & Busca    & 1.5894 & 2.12140 & 79.6278	 \\
+                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 9.2234 & 42.5022 & 178.4730 \\
+                            & & Busca    & 1.4827 & 1.95975 & 20.4496	 \\
+                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 8.2050 & 35.8312 & 780.4600 \\
+                            & & Busca    & 1.5804 & 1.82577 & 8.8614	 \\
+                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 7.7294 & 33.0609 & 7384.9900 \\
+                            & & Busca    & 1.6700 & 1.95760 & 12.3330	 \\
+                  \cline{2-6} &  \multirow{2}{*}{50001} & Inserção & 8.1941 & 37.5146 & 42112.9 \\
+                            & & Busca    & 1.6981 & 2.09856 & 336.733	 \\
+  \hline
+\end{tabular}
+\end{table}
+
+Por fim, comparando a \ref{tab:resultados} com a \ref{tab:complexidades}, é
+possível ver uma tendência para o esperado. A divergência no início dos gráficos
+é justificado pela variância das constantes dos algoritmos, como suas
+composições de instruções de baixo nível.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{figuras/graph_insert.png}
+\caption{Resultado do tempo de execução operação inserir}
+\label{fig:graph_insert}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth]{figuras/graph_search.png}
+\caption{Resultado do tempo de execução operação buscar}
+\label{fig:graph_search}
+\end{figure}
+
+% As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta
+% é grande suficiente para não caber por completo na memória principal e precisa
+% ser acessado da memória secundária. Elas agem de maneira a buscar o menor
+% número de acessos ao disco para acessar efetivamente o registro requisitado. A
+% altura dessa estrutura de árvores está no intervalo de $[\log_{2t-1} (n+1),\
+% \log_t \frac{n + 1}{2}]$, onde $t$ é a ordem da árvore que indica a quantidade
+% mínima de registros armazenados em um nó e $n$ a quantidade de elementos
+% \cite{clrs:22}. Com isso, a quantidade de acessos a páginas do disco é de
+% complexidade $O(\log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer
+% os registros dentro de cada nó, compondo no final a complexidade de $O(t
+% \log_t n)$ para buscas~\cite{clrs:22,Pm:10}. Por isso, são parte integrante da
+% estrutura central do projeto, pois permitem a indexação eficiente de cada
+% composição a partir de uma chave de identificação única, representado na
+% Tabela~\ref{tab:complexidades}.
+
 
 \section{Conclusão} \label{sec:conclusion}
 Diante dos dados apresentados, pode-se concluir que ambas tiveram 

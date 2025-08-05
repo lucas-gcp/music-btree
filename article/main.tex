@@ -161,9 +161,9 @@ disponíveis na internet e publicadas diariamente. Os autores abordam as
 principais funcionalidades.
 
 
-{\color{red}Existem muitos estudos focados no desenvolvimento de métodos de indexação
+Existem muitos estudos focados no desenvolvimento de métodos de indexação
 e no desenvolvimento de mecanismos eficientes de busca de músicas, que já são
-aplicados de acordo com determinados critérios.} Alguns dos critérios comuns,
+aplicados de acordo com determinados critérios. Alguns dos critérios comuns,
 que são relativamente antigos mas perpetuados na busca em serviços de \emph{streaming}
 da atualidade, são evidenciados por  Nanopoulos et al. em seu artigo de 2009 \cite{NaRaRuMa:09}. Nele, é
 dissertado sobre diferentes formas de realizar a busca por música em alguns
@@ -195,7 +195,7 @@ Outro artigo que propõe uma diferente alternativa para os métodos de pesquisa
 usuais é o \emph{Pied Piper}, proposto por Malhotra et al. \cite{MaRa:22},
 que apresenta um mecanismo de meta-busca de música \emph{pop} baseando-se em
 três fatores: letras, metadados (como nome da música, artista, álbum, ano de
-lançamento, andamento da música, tom, etc) e áudio (trechos ou gravaões). Com
+lançamento, andamento da música, tom, etc) e áudio (trechos ou gravações). Com
 isso, foi proposto uma nova perspectiva que possibilitasse extrapolar as
 limitações existentes em mecanismos clássicos de busca. Um dos diferenciais do
 modelo seria a integração da busca de áudio, baseada no método conhecido como
@@ -304,64 +304,28 @@ metadados de arquivos de música. Isso resultou numa implementação mais simple
 garantindo um código conciso e bem estruturado.
 
 \section{Resultados} \label{sec:results}
+A presente seção descreve os resultados teóricos acerca das operações nas duas
+árvores trabalhadas, bem como os resultados dos experimentos computacionais
+feitos sobre as duas estruturas.
 
-\begin{table}[ht]
-\centering
-\caption{Tabela de tempo gasto (ms) em operações nas árvores B e B\nolinebreak+}
-\label{tab:resultados}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-  Estrutura & Álbuns & Operação & Mínimo & Médio & Máximo \\ \hline
-  \multirow{8}{*}{Árvore B} & \multirow{2}{*}{11} & Inserção & 15.0585 & 27.9099 & 47.8788 \\
-                            & & Busca    & 0.0969 & 0.167911 & 1.3125	 \\
-                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 7.0789 & 26.7159 & 96.4244 \\
-                            & & Busca    & 0.2041 & 0.283696 & 2.2549	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 5.1006 & 21.5568 & 745.0050 \\
-                            & & Busca    & 0.1968 & 0.258417 & 7.2308	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 4.8288 & 18.5928 & 7220.0200 \\
-                            & & Busca    & 0.1844 & 0.245400 & 3.0743	 \\
-  \hline
+Sobre os aspectos teóricos, ambas as árvores apresentam complexidades assintóticas
+de pior caso iguais, pois as operações são similares~\cite{Co:79}.
+Destaca-se as complexidades de busca e inserção $O(d \log_d n)$, um dos aspectos
+mais importantes destas estruturas, pois também permitem flexibilidade da estrutura
+em decorrência da inserção eficiente.
 
-  \multirow{8}{*}{Árvore B\nolinebreak+} & \multirow{2}{*}{11} & Inserção & 8.0324 & 39.1596 & 48.9896 \\
-                            & & Busca    & 1.5894 & 2.12140 & 79.6278	 \\
-                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 9.2234 & 42.5022 & 178.4730 \\
-                            & & Busca    & 1.4827 & 1.95975 & 20.4496	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 8.2050 & 35.8312 & 780.4600 \\
-                            & & Busca    & 1.5804 & 1.82577 & 8.8614	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 7.7294 & 33.0609 & 7384.9900 \\
-                            & & Busca    & 1.6700 & 1.95760 & 12.3330	 \\
-  \hline
-\end{tabular}
-\end{table}
+A eficiência das árvores B é ressaltada quando se tratando do caso de armazenamento
+em memória secundária porque o maior custo está em recuperar as informações, e 
+não nas operações em memória primária.
+Assim, a principal medida de complexidade se torna a quantidade de leituras
+realizadas, que é $O(\log_d n)$ em ambas as estruturas.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=1\textwidth]{figuras/graph_insert.png}
-\caption{Resultado do tempo de execução operação inserir}
-\label{fig:graph_bt}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=1\textwidth]{figuras/graph_search.png}
-\caption{Resultado do tempo de execução operação buscar}
-\label{fig:graph_bpt}
-\end{figure}
-
-As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta é
-grande suficiente para não caber por completo na memória principal e precisa ser
-acessado da memória secundária. Elas agem de maneira a buscar o menor número de
-visitas ao disco para acessar efetivamente o registro requisitado. A altura
-dessa estrutura de árvores está no intervalo de $[\log_{2t-1} (n+1),\ \log_t
-\frac{n + 1}{2}]$, onde $t$ é a ordem da árvore que indica a quantidade mínima
-de registros armazenados em um nó e $n$ a quantidade de elementos
-\cite{clrs:22}. Com isso, a quantidade de acessos a páginas do disco é de
-complexidade $O(\log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer os
-registros dentro de cada nó, compondo no final a complexidade de $O(t \log_t n)$
-para buscas~\cite{clrs:22,Pm:10}. Por isso, são parte integrante da estrutura
-central do projeto, pois permitem a indexação eficiente de cada composição a
-partir de uma chave de identificação única, representado na
-Tabela~\ref{tab:complexidades}.
+Apesar da similaridade das complexidades, a estrutura da árvore B+ é mais complexa,
+armazenando uma lista encadeada com os registros e usando a árvore como índice
+para os registros.
+Por causa disso, o consumo de memória dela é maior que o da árvore B.
+Além do mais, as buscas devem percorrer a árvore até as folhas, onde se encontram
+os registros, de modo que é esperado que as operações sejam mais lentas.
 
 \begin{table}[ht]
 \centering
@@ -371,27 +335,27 @@ Tabela~\ref{tab:complexidades}.
 \hline
   Estrutura & Operação & Complexidade \\ \hline
   \multirow{4}{*}{Árvore B} & Espaço   & $O(n)$ \\
-  \cline{2-3} & Busca    & $O(t \log_t n)$ \\
-  \cline{2-3} & Inserção & $O(t \log_t n)$ \\
-  \cline{2-3} & Remoção  & $O(t \log_t n)$ \\
+  \cline{2-3} & Busca    & $O(d \log_d n)$ \\
+  \cline{2-3} & Inserção & $O(d \log_d n)$ \\
+  \cline{2-3} & Remoção  & $O(d \log_d n)$ \\
   \hline
   \multirow{4}{*}{Árvore B\nolinebreak+} & Espaço & $O(n)$ \\
-  \cline{2-3} & Busca & $O(t \log_t n)$ \\
-  \cline{2-3} & Inserção & $O(t \log_t n)$\\
-  \cline{2-3} & Remoção & $O(t \log_t n)$\\
+  \cline{2-3} & Busca & $O(d \log_d n)$ \\
+  \cline{2-3} & Inserção & $O(d \log_d n)$\\
+  \cline{2-3} & Remoção & $O(d \log_d n)$\\
   \hline
 \end{tabular}
 \end{table}
 
-Foram executados \emph{benchmarks} de tempo de execução com base nas operações
-de mais importância, inserção e busca, nas duas estruturas de árvores para
-comparar objetivamente as estatísticas de cada uma. Para isso, foi executada uma
-inserção pseudo-randômica usando uma \emph{seed} pré-definida que selecionou,
-dentre uma lista extensa de compositores extraído da
+Para os experimentos computacionais, foram executados \emph{benchmarks} de tempo
+de execução com base nas operações de mais importância, inserção e busca, nas duas
+estruturas de árvores para comparar objetivamente as estatísticas de cada uma.
+Para isso, foi executada uma inserção pseudo-randômica usando uma \emph{seed}
+pré-definida que selecionou, dentre uma lista extensa de compositores extraído da
 Wikipédia\footnote{\url{https://en.wikipedia.org/wiki/List_of_composers_by_name}},
-autores, e, com base numa distribuição binomial com média 20 e desvio 0,203 da
-quantidade de gravações por composição, permitindo uma simulação comparável com
-a realidade.
+autores, e, com base numa distribuição binomial com 20 tentativas com probabilidade
+de sucesso 20.3\%, a quantidade de composições por gravação, permitindo uma
+simulação comparável com casos reais.
 
 Usando essa metodologia, foram rodados diversos testes variando a quantidade de
 álbuns de 11 a 50001 para as duas árvores, armazenando o valor mínimo, médio e
@@ -411,9 +375,9 @@ cada árvore.
                             & & Busca    & 0.0969 & 0.167911 & 1.3125	 \\
                   \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 7.0789 & 26.7159 & 96.4244 \\
                             & & Busca    & 0.2041 & 0.283696 & 2.2549	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 5.1006 & 21.5568 & 745.0050 \\
+                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 5.1006 & 21.5568 & 745.005 \\
                             & & Busca    & 0.1968 & 0.258417 & 7.2308	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 4.8288 & 18.5928 & 7220.0200 \\
+                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 4.8288 & 18.5928 & 7220.02 \\
                             & & Busca    & 0.1844 & 0.245400 & 3.0743	 \\
                   \cline{2-6} &  \multirow{2}{*}{50001} & Inserção & 4.8917 & 26.7119 & 41062.2 \\
                             & & Busca    & 0.2019 & 0.285582 & 5.2455	 \\
@@ -423,9 +387,9 @@ cada árvore.
                             & & Busca    & 1.5894 & 2.12140 & 79.6278	 \\
                   \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 9.2234 & 42.5022 & 178.4730 \\
                             & & Busca    & 1.4827 & 1.95975 & 20.4496	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 8.2050 & 35.8312 & 780.4600 \\
+                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 8.2050 & 35.8312 & 780.460 \\
                             & & Busca    & 1.5804 & 1.82577 & 8.8614	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 7.7294 & 33.0609 & 7384.9900 \\
+                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 7.7294 & 33.0609 & 7384.99 \\
                             & & Busca    & 1.6700 & 1.95760 & 12.3330	 \\
                   \cline{2-6} &  \multirow{2}{*}{50001} & Inserção & 8.1941 & 37.5146 & 42112.9 \\
                             & & Busca    & 1.6981 & 2.09856 & 336.733	 \\
@@ -433,54 +397,56 @@ cada árvore.
 \end{tabular}
 \end{table}
 
-Por fim, comparando a \ref{tab:resultados} com a \ref{tab:complexidades}, é
-possível ver uma tendência para o esperado. A divergência no início dos gráficos
-é justificado pela variância das constantes dos algoritmos, como suas
-composições de instruções de baixo nível.
-
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{figuras/graph_insert.png}
-\caption{Resultado do tempo de execução operação inserir}
+\caption{Resultado do tempo de execução da operação inserir}
 \label{fig:graph_insert}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{figuras/graph_search.png}
-\caption{Resultado do tempo de execução operação buscar}
+\caption{Resultado do tempo de execução da operação buscar}
 \label{fig:graph_search}
 \end{figure}
 
-% As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta
-% é grande suficiente para não caber por completo na memória principal e precisa
-% ser acessado da memória secundária. Elas agem de maneira a buscar o menor
-% número de acessos ao disco para acessar efetivamente o registro requisitado. A
-% altura dessa estrutura de árvores está no intervalo de $[\log_{2t-1} (n+1),\
-% \log_t \frac{n + 1}{2}]$, onde $t$ é a ordem da árvore que indica a quantidade
-% mínima de registros armazenados em um nó e $n$ a quantidade de elementos
-% \cite{clrs:22}. Com isso, a quantidade de acessos a páginas do disco é de
-% complexidade $O(\log_t n)$, entretanto, demora o tempo $O(t)$ para percorrer
-% os registros dentro de cada nó, compondo no final a complexidade de $O(t
-% \log_t n)$ para buscas~\cite{clrs:22,Pm:10}. Por isso, são parte integrante da
-% estrutura central do projeto, pois permitem a indexação eficiente de cada
-% composição a partir de uma chave de identificação única, representado na
-% Tabela~\ref{tab:complexidades}.
+A partir dos dados de \emph{benchmark}, é perceptível que as operações na árvore B
+foram mais rápidas, com destaque para a operação de busca, que superou por uma 
+grande margem a árvore B+.
 
+Por fim, comparando os resultados teóricos com os práticos, a tendência logarítimica
+esperada pôde ser observada.
+Nota-se, no entanto, uma divergência no início dos gráficos, que pode ser explicada
+pelas constantes dos algoritmos, desconsideradas pela análise assintótica, que
+foca em analisar as tendências de crescimento.
+Ademais, a expectativa de que a árvore B performaria melhor que a B+ foi corroborada
+pelos experimentos computacionais, demonstrando que, para esta aplicação, a
+melhor escolha é a estrutura de árvore B, posto que não são utilizadas as 
+vantagens da árvore B+, como a possibilidade de percorrer os registros sequencialmente.
 
 \section{Conclusão} \label{sec:conclusion}
-Diante dos dados apresentados, pode-se concluir que ambas tiveram 
-tempo de inserção relavitamente parecidos, mas a árvore B\nolinebreak+, 
-em comparação com a árvore B, teve resultados piores em termos de tempo de 
-inserção e, em especial, de busca, além de ser mais complexa de implementar e 
-ocupar mais espaço na memória. Quanto ao desempenho ruim em 
-busca, ele é justificado pela própria natureza da árvore 
-B\nolinebreak+, que precisa ser percorrida até uma folha, onde será realizada 
-busca sequencial. A principal vantagem das árvores 
-B\nolinebreak+ é justamente a possibilidade percorrer os registros sequencialmente
-, coisa que não é feita na nossa implementação, de modo que as vantagens não são exploradas. 
-Enquanto isso, a árvore B demonstrou melhores resultados, por conta
-de sua simplicidade em implementação e ocupar menos espaço na memória.
+Este artigo buscou explorar formas de preencher o nicho de busca por gravações
+de música clássica, que permanece explorado por um número pequeno de empresas.
+Para isso, foram utilizadas árvores B e B+ para indexar gravações com base na
+composição.
+
+Diante dos dados apresentados, pode-se concluir que ambas as árvores podem ser
+utilizadas para esta aplicação.
+A árvore B se mostrou satisfatória, no entanto, a árvore B+ se mostrou menos
+eficiente, devido à sua maior complexidade.
+Como o acesso sequencial de registros, possibilitado por esta estrutura, não foi
+utilizado em nossa implementação, não se justifica o seu uso, tendo em vista o
+maior tempo de busca, maior memória utilizada e maior complexidade de implementação.
+
+Possibilidades de trabalhos futuros incluem o uso de diferentes estruturas para
+a indexação, como a possibilidade de utilizar Hash para transformar o nome do
+compositor em um valor numérico, ou estruturas dedicadas para busca de chaves
+textuais, como as árvores digitais.
+Ademais, um dos principais problemas desta abordagem é a necessidade de metadados
+consistentes para todas as gravações armazenadas, de modo que seria possível
+explorar formas de tratar os metadados de forma automática, por meio de
+aprendizado de máquina, por exemplo.
 
 
 \bibliographystyle{sbc}

@@ -47,94 +47,91 @@ Paulo Bezerra\inst{1}, Stephania Ferreira\inst{1}, Tales Bartolome\inst{1}}
 \section{Introdução}
 Dentro da música clássica, peças canônicas são gravadas centenas de vezes e,
 para grande parte dos ouvintes, a escuta atenta de diferentes gravações é um
-processo importante, permitindo a comparação das nuances de cada
-gravação~\cite{Bl:25}. Assim, um sistema que permita a busca de gravações de uma
-música é essencial. No entanto, como apontado por Blakeley~\cite{Bl:25}, os
-serviços de \emph{streaming}, que permitem acesso instantêneo e ilimitado a um
-grande catálogo de músicas, não possuem funcionalidades focadas em pesquisa de
-música clássica, tendo como foco maior a música popular. Assim sendo, a busca de
-música clássica nestes serviços é difícil e imprecisa, além de possuírem uma
-interface que não está alinhada a este estilo. Por causa disso, as necessidades
-dos ouvintes de música clássica não são supridas pelos grandes serviços de
-\emph{streaming}, como Spotify, Deezer e Youtube Music.
+processo importante, permitindo a comparação das nuances de cada gravação~\cite{Bl:25}.
+Assim, um sistema que permita a busca de gravações de uma música é essencial.
+Os serviços de \emph{streaming} permitem acesso instantêneo e ilimitado a um
+grande catálogo de músicas, facilitando o processo de escuta~\cite{MoVi:18}.
+No entanto poucas plataformas de streaming possuem funcionalidades focadas em
+pesquisa de música clássica, tendo como foco maior a música popular~\cite{Bl:25}.
+Assim sendo, a busca de música clássica nestes serviços é difícil e imprecisa, 
+além de possuírem uma interface que não está alinhada a este estilo.
+Por causa disso, as necessidades dos ouvintes de música clássica não são supridas
+pelos grandes serviços de \emph{streaming}, como Spotify, Deezer e Youtube Music.
 
-Tendo isso em vista, serviços dedicados à música clássica, tais como IDAGIO,
-Apple Music Classical e Presto Music, foram criados e permitem busca
+Tendo isso em vista, serviços dedicados à música clássica, tais como
+IDAGIO, Apple Music Classical e Presto Music, foram criados e permitem busca
 especializada, separando músicas de gravações, e interface considerando esta
-divisão~\cite{Bl:25}. Apesar de isto representar um avanço, a quantidade de
-plataformas ainda é pequena e muitas delas ainda não estão bem estabelecidas,
-pois é um mercado nichado, e não há alternativas de código aberto, todas são
-iniciativas privadas e sem detalhes acerca da implementação~\cite{Bl:25}.
+divisão~\cite{Bl:25}.
+Apesar de isto representar um avanço, a quantidade de plataformas ainda é pequena
+e muitas delas ainda não estão bem estabelecidas, pois é um mercado nichado, e 
+não há alternativas de código aberto, todas são iniciativas privadas e sem
+detalhes acerca da implementação~\cite{Bl:25}.
 
 Com base nisso, este trabalho objetiva implementar uma base de dados dedicada
 para busca de peças de música clássica, de modo a permitir acesso mais
 descentralizado a um sistema de busca, visando impulsionar o desenvolvimento de
-novas soluções para este problema. Para isso, serão utilizadas árvores B e B+
-para a organização das informações, pois estas são algumas das principais
-estruturas usadas no armazenamento de informações em memória
-secundária~\cite{Co:79}.
+novas soluções para este problema.
+Para isso, serão utilizadas árvores B e B+ para a organização das informações,
+pois estas são algumas das principais estruturas usadas no armazenamento de
+informações em memória secundária~\cite{Co:79}.
 
-O restante do artigo está organizado da seguinte forma: a
-Seção~\ref{sec:revisao} apresenta informações sobre as árvores B e B+ e
+O restante do artigo está organizado da seguinte forma:
+a Seção~\ref{sec:revisao} apresenta informações sobre as árvores B e B+ e
 trabalhos relacionados ao tema de pesquisa, a Seção~\ref{sec:problem} apresenta
 em mais detalhes o problema de pesquisa. A Seção~\ref{sec:implementation}
-descreve a implementação e as decisões tomadas para tal. A
-Seção~\ref{sec:results} apresenta os resultados obtidos sobre a eficiência das
-implementações. Por fim, a Seção~\ref{sec:conclusion} conclui o trabalho, com
-considerações gerais e possibilidades de trabalhos futuros de modo a melhor
-explorar a temática.
+descreve a implementação e as decisões tomadas para tal. A Seção~\ref{sec:results}
+apresenta os resultados obtidos sobre a eficiência das implementações.
+Por fim, a Seção~\ref{sec:conclusion} conclui o trabalho, com considerações
+gerais e possibilidades de trabalhos futuros de modo a melhor explorar a temática.
 
 
 
-\section{Revisão Bibliográfica} \label{sec:revisao} Esta seção apresenta a
-fundamentação teórica das estruturas de dados utilizadas, bem como outros
-trabalhos relacionados ao tema do presente artigo.
+\section{Revisão Bibliográfica} \label{sec:revisao}
+Esta seção apresenta a fundamentação teórica das estruturas de dados utilizadas,
+bem como outros trabalhos relacionados ao tema do presente artigo.
 
 \subsection{Fundamentação Teórica}
-Tendo em vista o uso de árvores B neste trabalho, esta seção tem como objetivo
+Tendo em vista o uso de árvores B neste trabalho, esta seção tem como objetivo 
 apresentar esta estrutura, sua utilidade e alguns resultados essenciais.
 
 Durante o processo de manutenção de uma base de dados, um dos maiores custos
-operacionais é o de acesso à memória secundária. O acesso à memória secundária
-toma um tempo de ordens de magnitude maior do que o tempo que o processador leva
-em instruções simples como de comparação de valores. No entanto, diversas
-aplicações trabalham com uma quantidade de dados muito maior do que a capacidade
-da memória principal financeiramente viável, o que torna o acesso ao disco uma
-operação fundamental para o processamento de qualquer base de dados e, ao
-pensarmos na otimização de tal processamento, a diminuição da quantidade destes
-acessos ao disco pode se tornar o principal fator para o ganho de performance
-operacional~\cite{clrs:22}.
+operacionais é o de acesso à memória secundária.
+O acesso à memória secundária toma um tempo de ordens de magnitude maior do que
+o tempo que o processador leva em instruções simples como de comparação de valores.
+No entanto, diversas aplicações trabalham com uma quantidade de dados muito maior
+do que a capacidade da memória principal financeiramente viável, o que torna o
+acesso ao disco uma operação fundamental para o processamento de qualquer base
+de dados e, ao pensarmos na otimização de tal processamento, a diminuição da
+quantidade destes acessos ao disco pode se tornar o principal fator para o ganho
+de performance operacional~\cite{clrs:22}.
 
 Uma das soluções mais usadas para otimizar operações em memória secundária é o
-uso de árvores B e suas variantes~\cite{Co:79}. Estas estruturas são árvores nas
-quais cada nó pode armazenar mais que um registro, diferentemente das árvores
-binárias.
+uso de árvores B e suas variantes~\cite{Co:79}. Estas estruturas são árvores
+nas quais cada nó pode armazenar mais que um registro, diferentemente das
+árvores binárias.
 
-Elas são definidas de modo que, considerando uma árvore não vazia de ordem $d
-\in \mathbb{N}$, a raiz seja uma folha ou tenha no mínimo dois filhos, cada nó
-diferente da raiz e das folhas possua entre $d+1$ e $2d +1$ filhos e todas as
-folhas estejam no mesmo nível. Além disso, pode-se concluir que cada nó que não
-é a raiz contém entre $d$ e $2d$ chaves e a altura $h$ da árvore está no
-intervalo
-\[ \log_{2d+1} (n+1) \leq h \leq 1 + \log_{d+1} \left(\frac{n +
-1}{2}\right)~\cite{SwMa:10}. \]
+Elas são definidas de modo que, considerando uma árvore não vazia de ordem
+$d \in \mathbb{N}$, a raiz seja uma folha ou tenha no mínimo dois filhos, cada
+nó diferente da raiz e das folhas possua entre $d+1$ e $2d +1$ filhos e todas as
+folhas estejam no mesmo nível.
+Além disso, pode-se concluir que cada nó que não é a raiz contém entre $d$ e $2d$
+chaves e a altura $h$ da árvore está no intervalo
+\[ \log_{2d+1} (n+1) \leq h \leq 1 + \log_{d+1} \left(\frac{n + 1}{2}\right)~\cite{SwMa:10}. \]
 
 A característica de altura logarítmica se mostra muito importante, pois faz com
-que operações de inserção e busca também tenham custo logarítimico. Ademais, a
-possibilidade de armazenar diversas chaves em cada nó é adequada para
-armazenamento em memória secundária pois possibilita tratar um nó como uma
-página % XXX o que é uma página?
-em disco, de modo que a quantidade de leituras em memória secundária é
-minimizada~\cite{Kn:98}.
+que operações de inserção e busca também tenham custo logarítimico.
+Ademais, a possibilidade de armazenar diversas chaves em cada nó é adequada para
+armazenamento em memória secundária pois possibilita tratar um nó como uma página % XXX o que é uma página?
+em disco, de modo que a quantidade de leituras em memória secundária é minimizada~\cite{Kn:98}.
 
 % Como apontado por Comer em seu artigo de 1979 \cite{Co:79}, a árvore B é uma
 % estrutura de dados utilizada para a organização de um arquivo e os índices
-% (também chamados chaves) de seus registros. Além disso, é uma generalização
-% das árvores binárias balanceadas. No entanto, diferente das árvores binárias,
-% cada nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t
-% \le n \le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
-% as operações de busca, inserção e remoção crescem em proporção logarítmica com
-% o aumento de registros do arquivo, o que representa um custo operacional
+% (também chamados chaves) de seus registros. Além disso, é uma generalização das
+% árvores binárias balanceadas. No entanto, diferente das árvores binárias, cada
+% nó de uma árvore B de ordem $t$ contém $n \in \mathbb{N}$ chaves, onde $t \le n
+% \le 2t-1$, além de $n+1$ ponteiros por nó. Em consequência, o custo para
+% as operações de busca, inserção e remoção crescem em proporção logarítmica com o
+% aumento de registros do arquivo, o que representa um custo operacional
 % relativamente baixo~\cite{Co:79}.
 
 % Para acessar cada nó da árvore B, é necessário acessar a memória secundária.
@@ -143,28 +140,34 @@ minimizada~\cite{Kn:98}.
 % página de registros, de modo a se atingir uma pequena quantidade de acessos ao
 % disco e a otimização dos processos de manipulação de registros do arquivo.
 
-Já a árvore B+ é uma variação da árvore B, possuindo como diferencial a ausência
-de registros em nós não-folha da estrutura, ou seja, os registros estão contidos
-apenas nas folhas e as chaves estarão nos nós internos, tendo um papel de guia
-na busca efetuada na árvore. Além disso, os nós folha da árvore são ligados, de
-modo que é possível percorrer os registros armazenados na árvore
-sequencialmente~\cite{Pm:10}.
+Já a árvore B+ é uma variação da árvore B, possuindo como
+diferencial a ausência de registros em nós não-folha da estrutura, ou seja,
+os registros estão contidos apenas nas folhas e as chaves estarão nos nós internos,
+tendo um papel de guia na busca efetuada na árvore.
+Além disso, os nós folha da árvore são ligados, de modo que é possível percorrer
+os registros armazenados na árvore sequencialmente~\cite{Pm:10}.
 
 
 \subsection{Trabalhos Relacionados}
 
-Visando explorar as diferentes vertentes desenvolvidas por outros autores, esta
-seção tem como objetivo investigar outras publicações que trazem abordagens
-relevantes na área de indexamento de músicas.
-
 A indexação de pesquisas é um problema amplamente discutido em artigos ao longo
 das décadas por conta de suas aplicabilidades no uso dos computadores,
-principalmente com a emersão dos serviços de busca e \emph{streaming}. No ramo
-da música, alguns dos critérios comuns na busca, que são relativamente antigos
-mas perpetuados na busca em serviços de \emph{streaming} da atualidade, são
-evidenciados por  Nanopoulos et al. em seu artigo de 2009 \cite{NaRaRuMa:09}.
-Nele, é dissertado sobre diferentes formas de realizar a busca por música em
-alguns serviços como Allmusic, Yahoo!Music, iTunes e entre outros. Dentre elas,
+principalmente com a emersão dos serviços de busca e \emph{streaming}.
+
+O artigo "Music search engines: Specifications and challenges" discute como
+aborda o crescente campo de pesquisa dos motores de busca de música (\emph{Music
+Search Engines}), motivado pelo crecimento exponencial da quantidade de músicas
+disponíveis na internet e publicadas diariamente. Os autores abordam as
+principais funcionalidades.
+
+
+{\color{red}Existem muitos estudos focados no desenvolvimento de métodos de indexação
+e no desenvolvimento de mecanismos eficientes de busca de músicas, que já são
+aplicados de acordo com determinados critérios.} Alguns dos critérios comuns,
+que são relativamente antigos mas perpetuados na busca em serviços de \emph{streaming}
+da atualidade, são evidenciados por  Nanopoulos et al. em seu artigo de 2009 \cite{NaRaRuMa:09}. Nele, é
+dissertado sobre diferentes formas de realizar a busca por música em alguns
+serviços como Allmusic, Yahoo!Music, iTunes e entre outros. Dentre elas,
 pode-se apontar a busca por metadados relacionados a músicas (biografia de
 artista, novos lançamentos, análises e entre outros), através de letra de música
 e, para aumentar o leque musical de um ouvinte, há a recomendação de músicas
@@ -174,33 +177,21 @@ associam a músicas para certas ocasiões (músicas para ouvir no carro ou músi
 alegres) ou característica de voz de tal artista ou a tags, ou busca por áudio,
 que nos serviços da atualidade não são muito utilizados.
 
-Na atualidade, os serviços de \emph{streaming} de música, como indicado Li et
-al. no seu artigo de 2019 \cite{LiThChToGa:19}, os mecanismos de busca, para
-manter certa qualidade precisam balancear o específico do abrangente, em que
-dependendo do indivíduo que irá pesquisar, ele terá uma mentalidade diferente no
-que deseja, que, de acordo com o artigo mencionado, pode ser dividida em dois
-grupos: focada e não focada. O usuário com a mente focada, ao efetuar uma busca,
-procura algo em particular, que seria agregado com o projeto, em especificidade
-no gênero de música clássica, enquanto o não focado possui uma ideia vaga do que
-busca, estando aberto a sugestões, efetuando pesquisas com frases mais
-subjetidas, como apresentada por Nanopoulos et al. Diante disso, é mostrado a
+Na atualidade, os serviços de \emph{streaming} de música, como indicado Li et al. no seu
+artigo de 2019 \cite{LiThChToGa:19}, os mecanismos de busca, para manter certa qualidade precisam
+balancear o específico do abrangente, em que dependendo do indivíduo que irá
+pesquisar, ele terá uma mentalidade diferente no que deseja, que, de acordo com o artigo
+mencionado, pode ser dividida em dois grupos: focada e não focada. O usuário com
+a mente focada, ao efetuar uma busca, procura algo em particular, que seria agregado com o projeto, em
+especificidade no gênero de música clássica, enquanto o não focado possui uma
+ideia vaga do que busca, estando aberto a sugestões, efetuando pesquisas com frases mais subjetidas,
+como apresentada por Nanopoulos et al. Diante disso, é mostrado a
 necessidade da caracterização destes grupos e como cada usuário se enquadra em
 cada um ou seus hábitos dependendo do meio que é inserido, desde gastar mais
 tempo em uma busca ou não, onde a implementação de árvores B e B + está sendo
 voltada ao estilo de busca específica, focada.
 
-Outro artigo que propõe uma diferente alternativa para os métodos de pesquisa
-usuais é o \emph{Pied Piper}, proposto por Malhotra et al. \cite{malhotra:22},
-que apresenta um mecanismo de meta-busca de música \emph{pop} baseando-se em
-três fatores: letras, metadados (como nome da música, artista, álbum, ano de
-lançamento, andamento da música, tom, etc) e áudio (trechos ou gravaões). Com
-isso, foi proposto uma nova perspectiva que possibilitasse extrapolar as
-limitações existentes em mecanismos clássicos de busca. Um dos diferenciais do
-modelo seria a integração da busca de áudio, baseada no método conhecido como
-\emph{Sequence-to-sequence Autoencoder Model for Audio Fingerprinting} (SAMAF)
-\cite{10.1145/3380828}, que cria uma "digital" única para cada música, utilizada
-em aplicativos como Shazam para identificar a música utilizando apenas trechos
-curtos.
+
 
 \section{Problema de Pesquisa} \label{sec:problem}
 
@@ -212,14 +203,15 @@ amigável, elevando a experiência do usuário.
 
 Mesmo com isso em mente, poucas plataformas de \emph{streaming} de música levam
 isso em consideração, pois se trata de um nicho dentro da imensa diversidade de
-usuários, estilos e gêneros musicais. Como exemplo, o comportamento do Spotify,
-uma das principais plataformas de \emph{streaming} de música, não é adequado,
-pois, ao realizar uma pesquisa com o nome da composição desejada, são exibidos
-resultados irrelevantes, como outras músicas com nomes parecidos (tanto do mesmo
-compositor, como de outros), dificultando a busca por gravações da peça
-desejada. A Figura~\ref{fig:spotify}, na qual foi feita a pesquisa ``Bach Trio
-Sonata no. 3'', é um exemplo disso, pois nenhum dos resultados principais condiz
-com a música pesquisada.
+usuários, estilos e gêneros musicais.
+Como exemplo, o comportamento do Spotify, uma das principais plataformas de
+\emph{streaming} de música, não é adequado, pois, ao realizar uma pesquisa com o
+nome da composição desejada, são exibidos resultados irrelevantes, como outras
+músicas com nomes parecidos (tanto do mesmo compositor, como de outros), 
+dificultando a busca por gravações da peça desejada.
+A Figura~\ref{fig:spotify}, na qual foi feita a pesquisa ``Bach Trio Sonata no. 3'',
+é um exemplo disso, pois nenhum dos resultados principais condiz com a música
+pesquisada.
 
 \begin{figure}[ht]
 \centering
@@ -240,17 +232,17 @@ manteria a qualidade do serviço tendo em mente ser uma empresa privada que visa
 primariamente o lucro, onde uma possível queda de ouvintes poderia tender a
 abolição dessas funcionalidades e do desenvolvimento desse setor.
 
-Dado o exposto, este artigo cria uma implementação na seção seguinte de uma
-aplicação computacional com o intuito de expandir o acesso a algoritmos
-especializados para busca de músicas clássicas, respeitando a necessidade
-explicitada anteriormente, por meio de uma prova de conceito. Isso implica a
-liberdade de qualquer usuário poder usar a solução de código livre
-disponibilizada podendo adaptar às próprias necessidades, como o uso em
-plataformas de \emph{streaming} ou em arquivos locais. Além disso, possibilita a
-adoção desse sistema ou guia para criação de um sistema próprio por empresas já
-estabelecidas neste mercado para uma disponibilidade de funcionalidades mais
-ampla dentre as plataformas, que resulta em refinamento nos seus mecanismos de
-busca e redução da concentração destes sistemas em poucos serviços.
+Dado o exposto, este artigo cria uma implementação na seção seguinte de uma aplicação
+computacional com o intuito de expandir o acesso a algoritmos especializados para busca
+de músicas clássicas, respeitando a necessidade explicitada anteriormente, por
+meio de uma prova de conceito. Isso implica a liberdade de qualquer usuário
+poder usar a solução de código livre disponibilizada podendo adaptar às próprias
+necessidades, como o uso em plataformas de \emph{streaming} ou em arquivos
+locais. Além disso, possibilita a adoção desse sistema ou guia para criação de um sistema
+próprio por empresas já estabelecidas neste mercado
+para uma disponibilidade de funcionalidades mais
+ampla dentre as plataformas, que resulta em refinamento nos seus mecanismos de busca e redução
+da concentração destes sistemas em poucos serviços.
 
 \section{Implementação} \label{sec:implementation}
 
@@ -272,12 +264,12 @@ guarda as seguintes informações:
 \end{itemize}
 
 Além dessa estrutura, os metadados da música também compõem a própria chave,
-sendo esta composta pela concatenação do Compositor e do Catálogo (ex: "Ludwig
-van Beethoven125"). Com isso, o principal valor de busca presente no valor dos
-elementos da árvore é o nome da composição. Com isso, a árvore serve como um
-indexamento de dados atrelados a um conjunto de gravações, cabendo o acréscimo
-de informações de outros tipos de metadados, como duração média, quantidade de
-gravações, etc.
+sendo esta composta pela concatenação do Compositor e do Catálogo (ex:
+"Ludwig van Beethoven125"). Com isso, o principal valor de busca presente no
+valor dos elementos da árvore é o nome da composição. Com isso, a árvore serve
+como um indexamento de dados atrelados a um conjunto de gravações, cabendo o
+acréscimo de informações de outros tipos de metadados, como duração média,
+quantidade de gravações, etc.
 
 Além disso, para cada música, é criado dinâmicamente um arquivo único contendo diferentes gravações 
 desta composição. Esse arquivo é armazenado na memória secundária com o caminho
@@ -301,40 +293,10 @@ metadados de arquivos de música. Isso resultou numa implementação mais simple
 garantindo um código conciso e bem estruturado.
 
 \section{Resultados} \label{sec:results}
-
-\begin{table}[ht]
-\centering
-\caption{Tabela de tempo gasto (ms) em operações nas árvores B e B\nolinebreak+}
-\label{tab:resultados}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-  Estrutura & Álbuns & Operação & Mínimo & Médio & Máximo \\ \hline
-  \multirow{8}{*}{Árvore B} & \multirow{2}{*}{11} & Inserção & 15.0585 & 27.9099 & 47.8788 \\
-                            & & Busca    & 0.0969 & 0.167911 & 1.3125	 \\
-                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 7.0789 & 26.7159 & 96.4244 \\
-                            & & Busca    & 0.2041 & 0.283696 & 2.2549	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 5.1006 & 21.5568 & 745.0050 \\
-                            & & Busca    & 0.1968 & 0.258417 & 7.2308	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 4.8288 & 18.5928 & 7220.0200 \\
-                            & & Busca    & 0.1844 & 0.245400 & 3.0743	 \\
-  \hline
-
-  \multirow{8}{*}{Árvore B\nolinebreak+} & \multirow{2}{*}{11} & Inserção & 8.0324 & 39.1596 & 48.9896 \\
-                            & & Busca    & 1.5894 & 2.12140 & 79.6278	 \\
-                  \cline{2-6} &  \multirow{2}{*}{101} & Inserção & 9.2234 & 42.5022 & 178.4730 \\
-                            & & Busca    & 1.4827 & 1.95975 & 20.4496	 \\
-                  \cline{2-6} &  \multirow{2}{*}{1001} & Inserção & 8.2050 & 35.8312 & 780.4600 \\
-                            & & Busca    & 1.5804 & 1.82577 & 8.8614	 \\
-                  \cline{2-6} &  \multirow{2}{*}{10001} & Inserção & 7.7294 & 33.0609 & 7384.9900 \\
-                            & & Busca    & 1.6700 & 1.95760 & 12.3330	 \\
-  \hline
-\end{tabular}
-\end{table}
-
 As árvores B e B\nolinebreak+ são úteis quando o conjunto de dados de consulta é
 grande suficiente para não caber por completo na memória principal e precisa ser
 acessado da memória secundária. Elas agem de maneira a buscar o menor número de
-acessos ao disco para acessar efetivamente o registro requisitado. A altura
+visitas ao disco para acessar efetivamente o registro requisitado. A altura
 dessa estrutura de árvores está no intervalo de $[\log_{2t-1} (n+1),\ \log_t
 \frac{n + 1}{2}]$, onde $t$ é a ordem da árvore que indica a quantidade mínima
 de registros armazenados em um nó e $n$ a quantidade de elementos
@@ -368,7 +330,17 @@ Tabela~\ref{tab:complexidades}.
 
 
 \section{Conclusão} \label{sec:conclusion}
-
+Diante dos dados apresentados, pode-se concluir que ambas tiveram 
+tempo de inserção relavitamente parecidos, mas a árvore B\nolinebreak+, 
+em comparação com a árvore B, teve resultados piores em termos de tempo de 
+inserção e, em especial, de busca, além de ser mais complexa de implementar e ocupar mais espaço
+na memória. 
+Isso é justificado pela própria 
+natureza da árvore B\nolinebreak+, que 
+precisa ser percorrida até uma folha, onde será realizada busca sequencial. 
+A principal vantagem das árvores B\nolinebreak+ é justamente a possibilidade percorrer 
+os registros sequencialmente, coisa que não é feita na nossa implementação, de modo que as
+vantagens não são exploradas. Enquanto isso, a árvore B demonstrou rápido tempo de busca
 
 
 \bibliographystyle{sbc}
